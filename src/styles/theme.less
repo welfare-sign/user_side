@@ -1,0 +1,46 @@
+@import "./variables";
+@import "./mixins";
+
+#app {
+	h1 {
+		font-size: @main-title-font-size;
+		font-weight: 600;
+	}
+	h2 {
+		font-size: @sub-title-font-size;
+	}
+	.weui-btn {
+		border-radius: 100px;
+		line-height: 2.6;
+	}
+	.weui-btn_primary {
+		.linear-gradient-horizontal();
+		.primary-box-shadow();
+		&.weui-btn_disabled {
+			position: relative;
+			&::after {
+				content: "";
+				position: absolute;
+				top: 0;
+				right: 0;
+				bottom: 0;
+				left: 0;
+				background: rgba(255, 255, 255, 0.3);
+			}
+		}
+	}
+	.weui-btn_plain-primary {
+        border: 2px solid @primary-color;
+        color: @primary-font-color;
+        .primary-box-shadow();
+	}
+	.weui-cell {
+		padding: 12px @normal-gap;
+	}
+	.weui-cells {
+		margin-top: 0;
+		&::before {
+			content: none;
+		}
+	}
+}
