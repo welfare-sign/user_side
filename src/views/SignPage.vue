@@ -45,7 +45,7 @@ import {
     wx_pay
 } from '@/api/index'
 
-import {startWXPay} from '@/plugins/wechat-sdk'
+import {startWXPay, setWxShare} from '@/plugins/wechat-sdk'
 
 export default {
     name: 'SignPage',
@@ -65,6 +65,12 @@ export default {
                 show: false,
                 amount: 5,
                 options: {}
+            },
+            shareOptions: {
+                title: '分享标题',
+                desc: '分享描述',
+                shareId: '',
+                imgUrl: require('@/assets/icon.jpg')
             }
         }
     },
@@ -79,6 +85,9 @@ export default {
         getInfo() {
             user_detail().then(({ data, res }) => {
                 this.info = data ? data : {}
+                this.shareOptions.shareId = data && data.id
+                // 分享需要当前用户信息所以要拿到用户信息才能设置
+                this.setShare()
             })
         },
         getList() {
@@ -146,6 +155,9 @@ export default {
                 })
                 this.getList()
             })
+        },
+        setShare() {
+            setWxShare(this.shareOptions)
         }
     }
 }

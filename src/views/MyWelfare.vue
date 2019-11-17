@@ -12,11 +12,24 @@
 // 组件
 import WelfareQrCode from './MyWelfare/WelfareQrCode'
 import WelfareList from './MyWelfare/WelfareList'
+
+// 接口
+import {issue_list} from '@/api/index'
 export default {
     name: 'MyWelfare',
     components: {
         WelfareQrCode,
         WelfareList
+    },
+    created () {
+        this.initWelfare()
+    },
+    methods: {
+        initWelfare() {
+            issue_list().then(({data}) => {
+                debugger
+            })
+        }
     }
 }
 </script>

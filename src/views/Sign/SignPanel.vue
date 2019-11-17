@@ -1,7 +1,7 @@
 <template>
     <w-card class="sign-panel">
         <header>
-            <h1>现在开始福力签</h1>
+            <h1>{{signedTime > 0 ? '已连续签到' + signedTime + '天' : '现在开始福力签'}}</h1>
             <span>签到规则</span>
         </header>
         <main>
@@ -15,20 +15,25 @@
                     :key="item.id"
                 />
             </ul>
-            <div v-if="!haveMissed">
-                <div class="missed-btn">
-                    <x-button type="primary" @click.native="shareDialog.show = true">分享补签</x-button>
-                    <x-button type="primary" plain @click.native="handlePay">出血补签</x-button>
+            <div v-if="signedTime < 5">
+                <div v-if="haveMissed">
+                    <div class="missed-btn">
+                        <x-button type="primary" @click.native="handleShare">分享补签</x-button>
+                        <x-button type="primary" plain @click.native="handlePay">出血补签</x-button>
+                    </div>
+                    <span class="re-sign" @click="handleResign">重新签到</span>
                 </div>
-                <span class="re-sign" @click="handleResign">重新签到</span>
+                <x-button
+                    type="primary"
+                    @click.native="handleSign"
+                    :disabled="signDone"
+                    v-else
+                >{{signDone ? '已签到' :'签 到'}}</x-button>
             </div>
-            <x-button
-                type="primary"
-                @click.native="handleSign"
-                :disabled="signDone"
-                v-else
-            >{{signDone ? '已签到' :'签 到'}}</x-button>
-            <!-- <x-button type="text">重新签到</x-button> -->
+            <div v-else class="qr-code">
+                <img src="@/assets/qrcode.jpg" width="180" height="180" alt="">
+                <p class="tips">长按扫码关注微信公众号<br>在公众号内领取福利</p>
+            </div>
         </main>
         <div>
             <x-dialog
@@ -136,6 +141,9 @@ export default {
         handleResign() {
             this.$emit('resign')
         },
+        handleShare() {
+            shareDialog.show = true
+        },
         handlePay() {
             this.$emit('pay')
         }
@@ -208,5 +216,9 @@ header {
         margin-top: 20px;
         text-decoration: underline;
     }
+}
+.qr-code {
+    text-align: center;
+    color: @main-font-color;
 }
 </style>

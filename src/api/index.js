@@ -38,14 +38,17 @@ export function login (params) {
 }
 
 
-export function checkin_record() {
+export function checkin_record(params) {
     /**
      * @description 获取签到记录
      * @return (promise)
+     * @params (object):
+     *  @customer_id (string): 当该参数有值时以该参数为准，否则以token用户为准
      */
     return http({
         url: 'v1/customers/checkin_record',
-        method: 'get'
+        method: 'get',
+        params
     })
 }
 

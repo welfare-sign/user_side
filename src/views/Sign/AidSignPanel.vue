@@ -1,16 +1,16 @@
 <template>
     <w-card class="sign-panel">
         <header>
-            <x-img :default-src="avatar" class="avatar" />
+            <x-img :default-src="info.headimgurl" class="avatar" />
             <div class="content">
-                <span class="user">James：</span>
+                <span class="user">{{info.nickname}}：</span>
                 <h2>“在福力签薅羊毛，一起签到领啤酒”</h2>
             </div>
         </header>
         <main>
             <ul class="sign-list">
                 <w-sign-item
-                    v-for="item in list"
+                    v-for="item in signList"
                     :signed="item.signed"
                     :missed="item.missed"
                     :final="item.final"
@@ -18,7 +18,8 @@
                     :key="item.id"
                 />
             </ul>
-            <x-button type="primary">签到助力</x-button>
+            <x-button type="primary" @click.native="handleAidSign" :disabled="!haveMissed">{{haveMissed ? '签到助力' : '补签成功'}}</x-button>
+            <x-button type="primary" @click.native="handleGoto" v-if="!haveMissed">我也要福利</x-button>
         </main>
     </w-card>
 </template>
@@ -44,6 +45,13 @@ export default {
         list: {
             type: Array,
             required: true
+        }
+    },
+    data() {
+        return {
+            today: new Date(),
+            currentItem: null,
+            shareId: ''
         }
     },
     computed: {
@@ -75,12 +83,10 @@ export default {
                 return item
             })
             return list
-        }
-    },
-    data() {
-        return {
-            today: new Date(),
-            currentItem: null
+        },
+        haveMissed() {
+            const missedIndex = this.signList.findIndex(item => item.missed)
+            return missedIndex > -1
         }
     },
     methods: {
@@ -88,8 +94,11 @@ export default {
             const diff = (today - needDate) / (1000 * 60 * 60 * 24)
             return diff
         },
-        handleSign() {
-            this.$emit('sign', this.currentItem.day)
+        handleAidSign() {
+            this.$emit('aid-sign')
+        },
+        handleGoto() {
+            this.$router.push({name: 'sign_page'})
         }
     }
 }

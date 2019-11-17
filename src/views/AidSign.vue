@@ -1,6 +1,6 @@
 <template>
     <div class="aid-sign">
-        <aid-sign-panel :info="info" :list="list" />
+        <aid-sign-panel :info="info" @aid-sign="handleAidSign" :list="list" />
         <merchant-recommend :list="merchantList" />
     </div>
 </template>
@@ -18,7 +18,7 @@ import {
     user_detail,
     checkin_record,
     near_merchant,
-    checkin
+    aid_checkin
 } from '@/api/index'
 
 export default {
@@ -37,6 +37,7 @@ export default {
         }
     },
     created() {
+        this.shareId = this.$route.query ? this.$route.query.shareid : ''
         this.initPage()
     },
     methods: {
@@ -46,12 +47,12 @@ export default {
             this.getStoreList()
         },
         getInfo() {
-            user_detail().then(({ data, res }) => {
+            user_detail({customer_id: this.shareId}).then(({ data, res }) => {
                 this.info = data ? data : {}
             })
         },
         getList() {
-            checkin_record().then(({ data, res }) => {
+            checkin_record({customer_id: this.shareId}).then(({ data, res }) => {
                 this.list = data ? data : []
             })
         },
@@ -80,9 +81,9 @@ export default {
                 })
             })
         },
-        handleSign(day) {
-            const params = { day }
-            checkin(params).then(({ res }) => {
+        handleAidSign() {
+            const data = {customer_id: this.shareId}
+            aid_checkin(data).then(({ res }) => {
                 this.getList()
             })
         }
