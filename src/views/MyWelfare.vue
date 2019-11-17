@@ -1,7 +1,7 @@
 <template>
     <div class="my-welfare">
-        <welfare-qr-code/>
-        <welfare-list/>
+        <welfare-qr-code :qr-code="qrCode" />
+        <welfare-list :list="welfareList" />
     </div>
 </template>
 <script>
@@ -14,20 +14,29 @@ import WelfareQrCode from './MyWelfare/WelfareQrCode'
 import WelfareList from './MyWelfare/WelfareList'
 
 // 接口
-import {issue_list} from '@/api/index'
+import { issue_list } from '@/api/index'
 export default {
     name: 'MyWelfare',
     components: {
         WelfareQrCode,
         WelfareList
     },
-    created () {
+    created() {
         this.initWelfare()
+    },
+    data() {
+        return {
+            qrCode: '',
+            welfareList: []
+        }
     },
     methods: {
         initWelfare() {
-            issue_list().then(({data}) => {
-                debugger
+            this.getWelfare()
+        },
+        getWelfare() {
+            issue_list().then(({ data }) => {
+                this.welfareList = data
             })
         }
     }

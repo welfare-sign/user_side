@@ -167,3 +167,13 @@ export function wx_pay () {
         method: 'post'
     })
 }
+export function is_supplement () {
+    /**
+     * @description 是否是补签
+     * @return (promise)
+     */
+    return http({
+        url: 'v1/customers/issue_records/is_supplement',
+        method: 'get'
+    })
+}

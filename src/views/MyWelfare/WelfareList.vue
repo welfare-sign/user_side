@@ -2,13 +2,13 @@
     <div class="welfare-list">
         <h1>我的福利</h1>
         <ul class="list">
-            <li v-for="item in list" :key="item.id">
+            <li v-for="item in welfareList" :key="item.id">
                 <w-card class="item">
                     <w-merchant-item
-                        :name="item.name"
+                        :name="item.store_name"
                         :address="item.address"
                         :desc="item.desc"
-                        :logo="item.logo"
+                        :logo="item.store_avatar"
                     />
                 </w-card>
             </li>
@@ -23,51 +23,44 @@
 // 组件
 import WCard from '@/components/WCard'
 import WMerchantItem from '@/components/WMerchantItem'
+// 依赖
+import Qs from 'qs'
+import baseUrl from '@/utils/doman'
 export default {
     name: 'WelfareList',
     components: {
         WCard,
         WMerchantItem
     },
+    props: {
+        list: {
+            type: Array,
+            require: true
+        }
+    },
     data() {
         return {
-            list: [
-                {
-                    id: '1',
-                    name: '西域狼烧烤（云南路店）',
-                    address: '云南南路100号',
-                    desc: '存有30瓶啤酒',
-                    logo: require('@/assets/imgs/1.png')
-                },
-                {
-                    id: '2',
-                    name: '小付烧烤（云南路店）',
-                    address: '云南南路100号',
-                    desc: '存有30瓶啤酒',
-                    logo: require('@/assets/imgs/2.png')
-                },
-                {
-                    id: '3',
-                    name: '新疆麦麦提烧烤（云南路店）',
-                    address: '云南南路100号',
-                    desc: '存有30瓶啤酒',
-                    logo: require('@/assets/imgs/3.png')
-                },
-                {
-                    id: '4',
-                    name: '新疆麦麦提烧烤（云南路店）',
-                    address: '云南南路100号',
-                    desc: '存有30瓶啤酒',
-                    logo: require('@/assets/imgs/4.png')
-                },
-                {
-                    id: '5',
-                    name: '新疆麦麦提烧烤（云南路店）',
-                    address: '云南南路100号',
-                    desc: '存有30瓶啤酒',
-                    logo: require('@/assets/imgs/5.png')
+            storeItem: {
+                    store_name: '',
+                    address: '',
+                    total_receive: '',
+                    desc: '',
+                    store_avatar: ''
                 }
-            ]
+        }
+    },
+    computed: {
+        welfareList () {
+            return this.list.map(item => {
+                item = item.merchant
+                item.desc = `存有${item.total_receive}瓶啤酒`
+                const file = {
+                    filename: item.store_avatar,
+                    type: 'avatar'
+                }
+                item.store_avatar = `${baseUrl}v1/files/download?${Qs.stringify(file)}`
+                return item
+            })
         }
     }
 }

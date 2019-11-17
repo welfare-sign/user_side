@@ -1,8 +1,11 @@
 <template>
     <w-card class="welfare-qr-code">
         <h2>福利码</h2>
-        <qrcode class="qrcode" value="https://vux.li?x-page=demo_qrcode" :size="180" type="img"></qrcode>
-        <p class="tips">向商家出示此二维码兑换福利</p>
+        <div style="text-align: center;">
+            <x-img :src="qrCode" :default-src="qrCode" style="width: 180px; height: 180px;"></x-img>
+            <!-- <qrcode class="qrcode" value="https://vux.li?x-page=demo_qrcode" :size="180" type="img"></qrcode> -->
+            <p class="tips">向商家出示此二维码兑换福利</p>
+        </div>
     </w-card>
 </template>
 <script>
@@ -12,11 +15,28 @@
  */
 // 组件
 import WCard from '@/components/WCard'
+import baseUrl from '@/utils/doman'
+
+// 依赖
+import Cookies from 'js-cookie'
 export default {
     name: 'WelfareQrCode',
     components: {
         WCard
+    },
+    data() {
+        return {
+            qrCode: `${baseUrl}v1/customers/qrcode?access_token=${Cookies.get(
+                'Authorization'
+            )}`
+        }
     }
+    // props: {
+    //     qrCode: {
+    //         type: String,
+    //         required: true
+    //     }
+    // }
 }
 </script>
 <style lang="less" scoped>

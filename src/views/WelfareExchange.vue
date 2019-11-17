@@ -1,7 +1,7 @@
 <template>
     <div class="welfare-exchange">
         <ul class="list">
-            <li v-for="item in list" :key="item.id" @click="handleSelect(item.id)">
+            <li v-for="item in welfareList" :key="item.id" @click="handleSelect(item.id)">
                 <w-card class="item">
                     <div class="item-content">
                         <input
@@ -14,10 +14,10 @@
                         <label class="w-radio-next" :for="item.id">
                             <span :class="['radio-box', {'checked': item.id === selected}]"></span>
                             <w-merchant-item
-                                :name="item.name"
+                                :name="item.store_name"
                                 :address="item.address"
                                 :desc="item.desc"
-                                :logo="item.logo"
+                                :logo="item.store_avatar"
                             />
                         </label>
                     </div>
@@ -25,7 +25,7 @@
             </li>
         </ul>
         <footer>
-            <x-button type="primary">领取福利</x-button>
+            <x-button type="primary" :disabled="!selected" @click.native="handleExchange">领取福利</x-button>
         </footer>
     </div>
 </template>
@@ -37,6 +37,12 @@
 // 组件
 import WCard from '@/components/WCard'
 import WMerchantItem from '@/components/WMerchantItem'
+
+// 接口
+import { issue_list, get_issue } from '@/api/index'
+// 依赖
+import Qs from 'qs'
+import baseUrl from '@/utils/doman'
 export default {
     name: 'WelfareExchange',
     components: {
@@ -45,61 +51,84 @@ export default {
     },
     data() {
         return {
-            selected: '1',
-            list: [
-                {
-                    id: '1',
-                    name: '西域狼烧烤（云南路店）',
-                    address: '云南南路100号',
-                    desc: '签到5天，即享30瓶啤酒',
-                    logo: require('@/assets/imgs/1.png')
-                },
-                {
-                    id: '2',
-                    name: '小付烧烤（云南路店）',
-                    address: '云南南路100号',
-                    desc: '签到5天，即享30瓶啤酒',
-                    logo: require('@/assets/imgs/2.png')
-                },
-                {
-                    id: '3',
-                    name: '新疆麦麦提烧烤（云南路店）',
-                    address: '云南南路100号',
-                    desc: '签到5天，即享30瓶啤酒',
-                    logo: require('@/assets/imgs/3.png')
-                },
-                {
-                    id: '4',
-                    name: '新疆麦麦提烧烤（云南路店）',
-                    address: '云南南路100号',
-                    desc: '签到5天，即享30瓶啤酒',
-                    logo: require('@/assets/imgs/4.png')
-                },
-                {
-                    id: '5',
-                    name: '新疆麦麦提烧烤（云南路店）',
-                    address: '云南南路100号',
-                    desc: '签到5天，即享30瓶啤酒',
-                    logo: require('@/assets/imgs/5.png')
-                },
-                {
-                    id: '6',
-                    name: '新疆麦麦提烧烤（云南路店）',
-                    address: '云南南路100号',
-                    desc: '签到5天，即享30瓶啤酒',
-                    logo: require('@/assets/imgs/6.png')
-                },
-                {
-                    id: '7',
-                    name: '新疆麦麦提烧烤（云南路店）',
-                    address: '云南南路100号',
-                    desc: '签到5天，即享30瓶啤酒',
-                    logo: require('@/assets/imgs/7.jpeg')
-                }
-            ]
+            selected: '',
+            list: []
+            // list: [
+            //     {
+            //         id: '1',
+            //         name: '西域狼烧烤（云南路店）',
+            //         address: '云南南路100号',
+            //         desc: '签到5天，即享30瓶啤酒',
+            //         logo: require('@/assets/imgs/1.png')
+            //     },
+            //     {
+            //         id: '2',
+            //         name: '小付烧烤（云南路店）',
+            //         address: '云南南路100号',
+            //         desc: '签到5天，即享30瓶啤酒',
+            //         logo: require('@/assets/imgs/2.png')
+            //     },
+            //     {
+            //         id: '3',
+            //         name: '新疆麦麦提烧烤（云南路店）',
+            //         address: '云南南路100号',
+            //         desc: '签到5天，即享30瓶啤酒',
+            //         logo: require('@/assets/imgs/3.png')
+            //     },
+            //     {
+            //         id: '4',
+            //         name: '新疆麦麦提烧烤（云南路店）',
+            //         address: '云南南路100号',
+            //         desc: '签到5天，即享30瓶啤酒',
+            //         logo: require('@/assets/imgs/4.png')
+            //     },
+            //     {
+            //         id: '5',
+            //         name: '新疆麦麦提烧烤（云南路店）',
+            //         address: '云南南路100号',
+            //         desc: '签到5天，即享30瓶啤酒',
+            //         logo: require('@/assets/imgs/5.png')
+            //     },
+            //     {
+            //         id: '6',
+            //         name: '新疆麦麦提烧烤（云南路店）',
+            //         address: '云南南路100号',
+            //         desc: '签到5天，即享30瓶啤酒',
+            //         logo: require('@/assets/imgs/6.png')
+            //     },
+            //     {
+            //         id: '7',
+            //         name: '新疆麦麦提烧烤（云南路店）',
+            //         address: '云南南路100号',
+            //         desc: '签到5天，即享30瓶啤酒',
+            //         logo: require('@/assets/imgs/7.jpeg')
+            //     }
+            // ]
         }
     },
+    computed: {
+        welfareList () {
+            return this.list.map(item => {
+                item = item.merchant
+                item.desc = `签到5天，即享${item.total_receive}瓶啤酒`
+                const file = {
+                    filename: item.store_avatar,
+                    type: 'avatar'
+                }
+                item.store_avatar = `${baseUrl}v1/files/download?${Qs.stringify(file)}`
+                return item
+            })
+        }
+    },
+    created() {
+        this.initExchage()
+    },
     methods: {
+        initExchage() {
+            issue_list().then(({data}) => {
+                this.list = data
+            })
+        },
         handleSelect(id) {
             /**
              * @description 单选框选中事件的返回函数
@@ -108,6 +137,18 @@ export default {
              * @id (string): 当前商家id
              */
             this.selected = id
+        },
+        handleExchange() {
+            const data = {
+                merchant_id: this.selected
+            }
+            get_issue(data).then(({res}) => {
+                this.$vux.toast.show({
+                    type: 'text',
+                    text: res.message
+                })
+                this.initExchage()
+            })
         }
     }
 }
@@ -138,7 +179,8 @@ export default {
     align-items: center;
 }
 .w-radio {
-    width: 20px;
+    margin-left: 6px;
+    // width: 20px;
     height: 20px;
     opacity: 0;
     margin-right: 8px;

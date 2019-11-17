@@ -1,7 +1,7 @@
 <template>
     <w-card class="sign-panel">
         <header>
-            <h1>{{signedTime > 0 ? '已连续签到' + signedTime + '天' : '现在开始福力签'}}</h1>
+            <h1>{{isAid ? '补签成功，' : ''}}{{signedTime > 0 ? '已连续签到' + signedTime + '天' : '现在开始福力签'}}</h1>
             <span>签到规则</span>
         </header>
         <main>
@@ -72,6 +72,10 @@ export default {
         list: {
             type: Array,
             required: true
+        },
+        isAid: {
+            type: Boolean,
+            default: false
         }
     },
     data() {

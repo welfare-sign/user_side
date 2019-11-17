@@ -1,6 +1,6 @@
 <template>
     <div class="sign-page">
-        <sign-panel @sign="handleSign" @resign="handleResign" @pay="handlePay" :list="list" />
+        <sign-panel @sign="handleSign" @resign="handleResign" @pay="handlePay" :list="list" :is-aid="isAidSign" />
         <user-info :info="info" />
         <merchant-recommend :list="merchantList" />
         <div>
@@ -42,7 +42,8 @@ import {
     near_merchant,
     checkin,
     re_checkin,
-    wx_pay
+    wx_pay,
+    is_supplement
 } from '@/api/index'
 
 import {startWXPay, setWxShare} from '@/plugins/wechat-sdk'
@@ -71,7 +72,8 @@ export default {
                 desc: '分享描述',
                 shareId: '',
                 imgUrl: require('@/assets/icon.jpg')
-            }
+            },
+            isAidSign: false
         }
     },
     created() {
@@ -81,6 +83,7 @@ export default {
         initPage() {
             this.getInfo()
             this.getList()
+            this.getSignStatus()
         },
         getInfo() {
             user_detail().then(({ data, res }) => {
@@ -121,6 +124,11 @@ export default {
                 })
             })
         },
+        getSignStatus() {
+            is_supplement().then(({data, res}) => {
+                this.isAidSign = data
+            })
+        },
         handleSign() {
             checkin().then(({ res }) => {
                 this.getList()
@@ -146,7 +154,6 @@ export default {
         },
         handleConfirm() {
             startWXPay(this.payDialog.options).then(res => {
-                debugger
                 console.log('支付成功', res)
                 this.payDialog.show = false
                 this.$vux.toast.show({

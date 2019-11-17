@@ -26,7 +26,11 @@ export default {
     //     }
     // },
     created() {
-        this.code = this.$route.query && this.$route.query.code
+        const query = this.$route.query
+        if (query) {
+            this.code = query.code
+            sessionStorage.setItem('fromPathName', JSON.stringify(query.from))
+        }
         this.initLogin()
         if(this.code) {
             this.handleLogin()
@@ -59,7 +63,9 @@ export default {
                 }
                 login(params).then(({ data }) => {
                     Cookies.set('Authorization', data)
-                    this.$router.push({ name: 'sign_page' })
+                    const fromPathName = JSON.parse(sessionStorage.getItem('fromPathName'))
+                    const name = fromPathName || 'sign_page'
+                    this.$router.push({ name })
                 })
             }
         }

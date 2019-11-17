@@ -14,7 +14,9 @@ import './styles/theme.less'
 Vue.config.productionTip = false
 FastClick.attach(document.body)
 
-new Vue({
+const vm = new Vue({
   router,
   render: h => h(App)
 }).$mount('#app-box')
+
+export default vm
