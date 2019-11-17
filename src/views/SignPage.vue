@@ -46,6 +46,9 @@ import {
     is_supplement
 } from '@/api/index'
 
+// 依赖
+const wx = require('weixin-js-sdk')
+
 import {startWXPay, setWxShare} from '@/plugins/wechat-sdk'
 
 export default {
@@ -114,7 +117,7 @@ export default {
         getLocation() {
             const _this = this
             return new Promise((resolve, reject) => {
-                _this.$wechat.getLocation({
+                wx.getLocation({
                     type: 'wgs84',
                     success: res => {
                         _this.lon = res.longitude

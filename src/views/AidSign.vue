@@ -21,6 +21,9 @@ import {
     aid_checkin
 } from '@/api/index'
 
+// 依赖
+const wx = require('weixin-js-sdk')
+
 export default {
     name: 'SignPage',
     components: {
@@ -44,7 +47,6 @@ export default {
         initPage() {
             this.getInfo()
             this.getList()
-            this.getStoreList()
         },
         getInfo() {
             user_detail({customer_id: this.shareId}).then(({ data, res }) => {
@@ -54,10 +56,12 @@ export default {
         getList() {
             checkin_record({customer_id: this.shareId}).then(({ data, res }) => {
                 this.list = data ? data : []
+                this.getStoreList()
             })
         },
         getStoreList() {
             const _this = this
+            debugger
             this.getLocation().then(() => {
                 const params = {
                     lon: _this.lon,
@@ -71,7 +75,7 @@ export default {
         getLocation() {
             const _this = this
             return new Promise((resolve, reject) => {
-                this.$wechat.getLocation({
+                wx.getLocation({
                     type: 'wgs84',
                     success: res => {
                         _this.lon = res.longitude

@@ -5,12 +5,12 @@
             <span class="text-btn" @click="showAll">查看全部</span>
         </header>
         <group>
-            <cell-box v-for="item in list" :key="item.id">
+            <cell-box v-for="item in storeList" :key="item.id">
                 <w-merchant-item
-                    :name="item.name"
+                    :name="item.store_name"
                     :address="item.address"
                     :desc="item.desc"
-                    :logo="item.logo"
+                    :logo="item.store_avatar"
                 />
             </cell-box>
         </group>
@@ -26,37 +26,59 @@
  */
 import WCard from '@/components/WCard'
 import WMerchantItem from '@/components/WMerchantItem'
+// 依赖
+import Qs from 'qs'
+import baseUrl from '@/utils/doman'
 export default {
     name: 'MerchantRecommend',
     components: {
         WCard,
         WMerchantItem
     },
+    props: {
+        list: {
+            type: Array,
+            required: true,
+        }
+    },
+    computed: {
+        storeList () {
+            return this.list.map(item => {
+                item.desc = `签到${item.checkin_days}天，即享${item.checkin_num}瓶啤酒`
+                const file ={
+                    filename: item.store_avatar,
+                    type: 'avatar'
+                }
+                item.store_avatar = `${baseUrl}v1/files/download?${Qs.stringify(file)}`
+                return item
+            })
+        }
+    },
     data() {
         return {
-            list: [
-                {
-                    id: '1',
-                    name: '西域狼烧烤（云南路店）',
-                    address: '云南南路100号',
-                    desc: '签到5天，即享30瓶啤酒',
-                    logo: require('@/assets/imgs/1.png')
-                },
-                {
-                    id: '2',
-                    name: '小付烧烤（云南路店）',
-                    address: '云南南路100号',
-                    desc: '签到5天，即享30瓶啤酒',
-                    logo: require('@/assets/imgs/2.png')
-                },
-                {
-                    id: '3',
-                    name: '新疆麦麦提烧烤（云南路店）',
-                    address: '云南南路100号',
-                    desc: '签到5天，即享30瓶啤酒',
-                    logo: require('@/assets/imgs/3.png')
-                }
-            ]
+            // list: [
+            //     {
+            //         id: '1',
+            //         name: '西域狼烧烤（云南路店）',
+            //         address: '云南南路100号',
+            //         desc: '签到5天，即享30瓶啤酒',
+            //         logo: require('@/assets/imgs/1.png')
+            //     },
+            //     {
+            //         id: '2',
+            //         name: '小付烧烤（云南路店）',
+            //         address: '云南南路100号',
+            //         desc: '签到5天，即享30瓶啤酒',
+            //         logo: require('@/assets/imgs/2.png')
+            //     },
+            //     {
+            //         id: '3',
+            //         name: '新疆麦麦提烧烤（云南路店）',
+            //         address: '云南南路100号',
+            //         desc: '签到5天，即享30瓶啤酒',
+            //         logo: require('@/assets/imgs/3.png')
+            //     }
+            // ]
         }
     },
     methods: {
