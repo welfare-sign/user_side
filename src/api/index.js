@@ -49,17 +49,14 @@ export function checkin_record() {
     })
 }
 
-export function checkin (data) {
+export function checkin () {
     /**
      * @description 用户执行签到
      * @return (promise)
-     * @data (object):
-     *  @day (number): 签到第几天
      */
     return http({
         url: 'v1/customers/checkin_record',
-        method: 'post',
-        data
+        method: 'post'
     })
 }
 
@@ -69,7 +66,6 @@ export function aid_checkin (data) {
      * @return (promise)
      * @data (object):
      *  @customer_id (string): 用户id
-     *  @day (number): 第几天
      */
     return http({
         url: 'v1/customers/checkin_record/help',
@@ -155,5 +151,16 @@ export function get_qrcode () {
     return http({
         url: 'v1/customers/qrcode',
         method: 'get'
+    })
+}
+
+export function wx_pay () {
+    /**
+     * @dscription 用户支付
+     * @return (promise)
+     */
+    return http({
+        url: 'v1/wx/pay',
+        method: 'post'
     })
 }

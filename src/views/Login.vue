@@ -16,16 +16,21 @@ export default {
     name: 'Login',
     data() {
         return {
-            options: {}
+            options: {},
+            code: ''
         }
     },
-    computed: {
-        code() {
-            return this.$route.query && this.$route.query.code
-        }
-    },
+    // computed: {
+    //     code() {
+    //         return this.$route.query && this.$route.query.code
+    //     }
+    // },
     created() {
+        this.code = this.$route.query && this.$route.query.code
         this.initLogin()
+        if(this.code) {
+            this.handleLogin()
+        }
     },
     methods: {
         initLogin() {
@@ -40,13 +45,12 @@ export default {
             if (!this.code) {
                 const searchObj = {
                     appid: this.options.appid,
-                    // redirect_uri: location.origin,
-                    redirect_uri: 'http://api.fuliqian.com/',
+                    redirect_uri: location.href,
+                    response_type: 'code',
                     scope: 'snsapi_userinfo'
                 }
-                debugger
                 const searchStr = Qs.stringify(searchObj)
-                const url = wx_authrity_url + searchStr
+                const url = wx_authrity_url + searchStr + '#wechat_redirect'
                 console.log(url)
                 window.location.href = url
             } else {

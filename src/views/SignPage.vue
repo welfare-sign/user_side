@@ -1,8 +1,28 @@
 <template>
     <div class="sign-page">
-        <sign-panel @sign="handleSign" :list="list"/>
+        <sign-panel @sign="handleSign" @resign="handleResign" @pay="handlePay" :list="list" />
         <user-info :info="info" />
         <merchant-recommend :list="merchantList" />
+        <div>
+            <x-dialog
+                v-model="payDialog.show"
+                class="pay-dialog"
+                :dialog-style="{'max-width': '100%', 'margin': '112px 34px', 'background-color': 'transparent'}"
+                hide-on-blur
+            >
+                <div class="box">
+                    <img class="wx-logo" src="@/assets/wechat-pay.png"/>
+                    <p>微信支付{{payDialog.amount}}元即可补签</p>
+                    <div class="btn-group">
+                        <span class="cancel" @click="handleCancel">我再想想</span>
+                        <span class="confirm" @click="handleConfirm">微信支付</span>
+                    </div>
+                </div>
+                <div class="pay-close" @click="handleResign">
+                    <span>重新签到</span>
+                </div>
+            </x-dialog>
+        </div>
     </div>
 </template>
 <script>
@@ -16,7 +36,16 @@ import UserInfo from './Sign/UserInfo'
 import MerchantRecommend from './Sign/MerchantRecommend'
 
 // 接口
-import { user_detail, checkin_record, near_merchant, checkin } from '@/api/index'
+import {
+    user_detail,
+    checkin_record,
+    near_merchant,
+    checkin,
+    re_checkin,
+    wx_pay
+} from '@/api/index'
+
+import {startWXPay} from '@/plugins/wechat-sdk'
 
 export default {
     name: 'SignPage',
@@ -31,7 +60,12 @@ export default {
             lat: '',
             info: {},
             list: [],
-            merchantList: []
+            merchantList: [],
+            payDialog: {
+                show: false,
+                amount: 5,
+                options: {}
+            }
         }
     },
     created() {
@@ -54,16 +88,13 @@ export default {
             })
         },
         getStoreList() {
-            debugger
             const _this = this
             this.getLocation().then(() => {
-                debugger
                 const params = {
                     lon: _this.lon,
                     lat: _this.lat
                 }
-                debugger
-                near_merchant(params).then(({data, res}) => {
+                near_merchant(params).then(({ data, res }) => {
                     _this.merchantList = data ? data : []
                 })
             })
@@ -71,11 +102,9 @@ export default {
         getLocation() {
             const _this = this
             return new Promise((resolve, reject) => {
-                debugger
                 _this.$wechat.getLocation({
                     type: 'wgs84',
-                    success: (res) => {
-                        debugger
+                    success: res => {
                         _this.lon = res.longitude
                         _this.lat = res.latitude
                         resolve()
@@ -83,9 +112,38 @@ export default {
                 })
             })
         },
-        handleSign(day) {
-            const params = {day}
-            checkin(params).then(({res}) => {
+        handleSign() {
+            checkin().then(({ res }) => {
+                this.getList()
+            })
+        },
+        handleResign() {
+            this.payDialog.show = false
+            re_checkin().then(res => {
+                console.log('重新签到执行成功', res)
+                this.getList()
+            })
+        },
+        handlePay() {
+            wx_pay().then(({data}) => {
+                data = JSON.parse(data)
+                this.payDialog.options = data
+                this.payDialog.amount = parseInt((data.payFee)/100)
+                this.payDialog.show = true
+            })
+        },
+        handleCancel() {
+            this.payDialog.show = false
+        },
+        handleConfirm() {
+            startWXPay(this.payDialog.options).then(res => {
+                debugger
+                console.log('支付成功', res)
+                this.payDialog.show = false
+                this.$vux.toast.show({
+                    type: 'text',
+                    text: '支付成功'
+                })
                 this.getList()
             })
         }
@@ -99,5 +157,42 @@ export default {
     padding-right: @normal-gap;
     padding-bottom: 20px;
     position: relative;
+}
+.pay-dialog {
+    font-size: @sub-title-font-size;
+    font-weight: 400;
+    .box {
+        border-radius: @main-radius;
+        background: #fff;
+        color: @main-font-color;
+        text-align: center;
+        .wx-logo {
+            margin-top: 26px;
+            margin-bottom: 12px;
+            width: 50px;
+            height: 45px;
+        }
+        .btn-group {
+            margin-top: 26px;
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+            display: flex;
+            &>span {
+                flex: 1;
+                display: block;
+                padding: @assist-gap 0;
+            }
+            .cancel {
+                color: @normal-font-color;
+            }
+            .confirm {
+                color: #1FBB22;
+            }
+        }
+    }
+    .pay-close {
+        color: #fff;
+        margin-top: 20px;
+        text-decoration: underline;
+    }
 }
 </style>

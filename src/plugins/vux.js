@@ -6,7 +6,9 @@ import {
 	XImg,
 	Qrcode,
 	WechatPlugin,
-	AjaxPlugin
+	AjaxPlugin,
+	XDialog,
+	Confirm
 } from "vux"
 
 Vue.component("x-button", XButton)
@@ -14,5 +16,7 @@ Vue.component("group", Group)
 Vue.component("cell-box", CellBox)
 Vue.component("x-img", XImg)
 Vue.component("qrcode", Qrcode)
+Vue.component('x-dialog', XDialog)
+Vue.component('confirm', Confirm)
 Vue.use(WechatPlugin)
 Vue.use(AjaxPlugin)

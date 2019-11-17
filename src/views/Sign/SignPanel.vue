@@ -15,9 +15,12 @@
                     :key="item.id"
                 />
             </ul>
-            <div class="missed-btn" v-if="!haveMissed">
-                <x-button type="primary" @click.native="handleShare">分享补签</x-button>
-                <x-button type="primary" plain @click.native="handlePay">出血补签</x-button>
+            <div v-if="!haveMissed">
+                <div class="missed-btn">
+                    <x-button type="primary" @click.native="shareDialog.show = true">分享补签</x-button>
+                    <x-button type="primary" plain @click.native="handlePay">出血补签</x-button>
+                </div>
+                <span class="re-sign" @click="handleResign">重新签到</span>
             </div>
             <x-button
                 type="primary"
@@ -25,7 +28,25 @@
                 :disabled="signDone"
                 v-else
             >{{signDone ? '已签到' :'签 到'}}</x-button>
+            <!-- <x-button type="text">重新签到</x-button> -->
         </main>
+        <div>
+            <x-dialog
+                v-model="shareDialog.show"
+                class="share-dialog"
+                :dialog-style="{'max-width': '100%', height: '50%', 'background-color': 'transparent', 'margin': '112px 34px'}"
+                hide-on-blur
+            >
+                <div class="box">
+                    <h2>你已连续签到</h2>
+                    <div class="box-main-area">{{signedTime}} 天</div>
+                    <div class="remaind-text">继续分享好友即可补签</div>
+                </div>
+                <div class="share-close" @click="shareDialog.show=false">
+                    <span>遗憾离开</span>
+                </div>
+            </x-dialog>
+        </div>
     </w-card>
 </template>
 <script>
@@ -46,6 +67,15 @@ export default {
         list: {
             type: Array,
             required: true
+        }
+    },
+    data() {
+        return {
+            today: new Date(),
+            currentItem: {},
+            shareDialog: {
+                show: false
+            }
         }
     },
     computed: {
@@ -84,12 +114,15 @@ export default {
         haveMissed() {
             const missedIndex = this.signList.findIndex(item => item.missed)
             return missedIndex > -1
-        }
-    },
-    data() {
-        return {
-            today: new Date(),
-            currentItem: {}
+        },
+        signedTime() {
+            let time = 0
+            this.signList.forEach(item => {
+                if (item.signed) {
+                    time += 1
+                }
+            })
+            return time
         }
     },
     methods: {
@@ -98,31 +131,13 @@ export default {
             return diff
         },
         handleSign() {
-            this.$emit('sign', this.currentItem.day)
+            this.$emit('sign')
         },
-        handleShare() {
-            // TODO 分享
-            debugger
-            this.$wechat.ready(() => {
-                debugger
-                // TODO
-                this.$watch.updateAppMessageShareData({
-                    title: '分享标题', // 分享标题
-                    desc: '分享描述', // 分享描述
-                    link: `${window.location.origin}/aid_sign`, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-                    imgUrl: '', // 分享图标
-                    success() {
-                        debugger
-                        this.$vux.toast.show({
-                            type: 'text',
-                            message: '分享成功'
-                        })
-                    }
-                })
-            })
+        handleResign() {
+            this.$emit('resign')
         },
         handlePay() {
-            // TODO 支付
+            this.$emit('pay')
         }
     }
 }
@@ -148,8 +163,50 @@ header {
     display: flex;
     justify-content: space-between;
     & > button:first-child {
-        margin-right: 12px;
+        margin-right: @assist-gap;
         margin-top: 15px;
+    }
+}
+.re-sign {
+    display: block;
+    text-align: center;
+    margin-top: 20px;
+    font-size: @sub-title-font-size;
+    color: @normal-font-color;
+    font-weight: 400;
+}
+.share-dialog {
+    font-size: @sub-title-font-size;
+    line-height: 20px;
+    font-weight: 400;
+    .box {
+        padding: @assist-gap;
+        border-radius: @main-radius;
+        background: #fff;
+    }
+    h2 {
+        font-weight: 400;
+    }
+    .box-main-area {
+        margin: 20px 0;
+        padding: 0 28px;
+        border-radius: @main-radius / 2;
+        background: #e6e6e6;
+        display: inline-block;
+        font-size: 46px;
+        line-height: 54px;
+        color: @primary-color;
+    }
+    .remaind-text {
+        padding-top: @assist-gap;
+        text-align: center;
+        color: @primary-color;
+        border-top: 1px solid rgba(0, 0, 0, 0.1);
+    }
+    .share-close {
+        color: #fff;
+        margin-top: 20px;
+        text-decoration: underline;
     }
 }
 </style>
