@@ -177,3 +177,23 @@ export function is_supplement () {
         method: 'get'
     })
 }
+
+export function query_merchants(params) {
+    /**
+     * @description 获取商户列表
+     * @return (promise)
+     * 
+     * @params (object):
+     *  @store_name (string): 商户名
+     *  @contact_name (string): 联系人
+     *  @contact_phone (string): 联系电话
+     *  @status (string): 商户状态
+     *  @page_no (number): 页码
+     *  @page_size (number): 本页条数
+     */
+    return http({
+        url: 'v1/merchants',
+        method: 'get',
+        params
+    })
+}

@@ -11,6 +11,7 @@ import vm from '@/main'
 import baseUrl from '@/utils/doman'
 const http = Vue.http.create({
 	baseURL: baseUrl || '',
+	// baseURL: '',
 	timeout: 60 * 1000 // Timeout
 	// withCredentials: true, // Check cross-site Access-Control
 })

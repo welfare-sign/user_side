@@ -55,31 +55,7 @@ export default {
         }
     },
     data() {
-        return {
-            // list: [
-            //     {
-            //         id: '1',
-            //         name: '西域狼烧烤（云南路店）',
-            //         address: '云南南路100号',
-            //         desc: '签到5天，即享30瓶啤酒',
-            //         logo: require('@/assets/imgs/1.png')
-            //     },
-            //     {
-            //         id: '2',
-            //         name: '小付烧烤（云南路店）',
-            //         address: '云南南路100号',
-            //         desc: '签到5天，即享30瓶啤酒',
-            //         logo: require('@/assets/imgs/2.png')
-            //     },
-            //     {
-            //         id: '3',
-            //         name: '新疆麦麦提烧烤（云南路店）',
-            //         address: '云南南路100号',
-            //         desc: '签到5天，即享30瓶啤酒',
-            //         logo: require('@/assets/imgs/3.png')
-            //     }
-            // ]
-        }
+        return {}
     },
     methods: {
         showAll() {

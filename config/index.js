@@ -11,11 +11,11 @@ module.exports = {
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {
-      '/v1': 'http://47.100.29.191:18080/'
+      // '/v1': 'http://api.fuliqian.com/'
     },
 
     // Various Dev Server settings
-    host: 'api.fuliqian.com', // can be overwritten by process.env.HOST
+    host: 'h5.fuliqian.com', // can be overwritten by process.env.HOST
     // host: '127.0.0.1', // can be overwritten by process.env.HOST
     port: 8080, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
     autoOpenBrowser: false,
