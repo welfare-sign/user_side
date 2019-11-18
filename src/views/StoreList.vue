@@ -53,13 +53,15 @@ export default {
     },
     computed: {
         storeList() {
-            return this.list.map(item => {
+            const list = this.list.concat([])
+            return list.map(item => {
                 item.desc = `签到${item.checkin_days}天，即享${item.checkin_num}瓶啤酒`
                 const file = {
                     filename: item.store_avatar,
                     type: 'avatar'
                 }
-                item.store_avatar = `${baseUrl}v1/files/download?${Qs.stringify(
+                const regx = /type=avatar$/i
+                item.store_avatar = regx.test(item.store_avatar) ? item.store_avatar : `${baseUrl}v1/files/download?${Qs.stringify(
                     file
                 )}`
                 return item
@@ -84,10 +86,12 @@ export default {
                 } else {
                     this.list = data
                 }
+                console.log(this.list)
             })
         },
         loadMore() {
-            if (this.page_no < this.total) {
+            const length = this.list.length
+            if (length < this.total) {
                 this.page_no += 1
                 this.getList(true)
             } else {

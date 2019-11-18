@@ -1,8 +1,4 @@
 import Vue from 'vue'
-// import { WechatPlugin, ToastPlugin } from 'vux'
-import { WechatPlugin } from 'vux'
-Vue.use(WechatPlugin)
-// Vue.use(ToastPlugin)
 
 const wx = require('weixin-js-sdk')
 
