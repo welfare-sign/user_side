@@ -110,7 +110,7 @@ export default {
                 )
                 item.missed = diff >= 1 && !item.signed
                 item.label = `第${item.day}天`
-                if (diff >= 0 && diff < 1) {
+                if (diff === 0) {
                     _this.currentItem = item
                 }
                 return item
@@ -136,8 +136,18 @@ export default {
     },
     methods: {
         isMissed(today, needDate) {
+            today = this.returnDay(today)
+            needDate = this.returnDay(needDate)
             const diff = (today - needDate) / (1000 * 60 * 60 * 24)
             return diff
+        },
+        returnDay(date) {
+            let y = date.getFullYear()
+            let m = date.getMonth()+1
+                m = m > 9 ? m : `0${m}`
+            let d = date.getDate()
+                d = d > 9 ? d : `0${d}`
+            return new Date(`${y}/${m}/${d}`)
         },
         handleSign() {
             this.$emit('sign')

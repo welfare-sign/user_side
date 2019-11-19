@@ -24,7 +24,6 @@ http.interceptors.request.use(
 			const routeName = vm.$route.name
 			if (!Authorization && routeName !== 'login') {
 				router.push({ name: 'login', query: {from: routeName}})
-				// router.push({ name: 'login' , query: {code: '001gO5uf2nGunI0baksf268Htf2gO5ui'}})
 			} else {
 				config.headers.Authorization = Authorization
 			}
@@ -46,11 +45,9 @@ http.interceptors.response.use(
 			}
 		} else {
 			const routeName = vm.$route.name
-			if (data.code === 'NO_PERMISSION' && routeName !== 'login' ) {
-				router.replace({ name: 'login', query: {from: routeName} })
-				// router.replace({ name: 'login', query: {code: '001gO5uf2nGunI0baksf268Htf2gO5ui'} })
+			if (data.code === 'NO_PERMISSION') {
+				routeName !== 'login' && router.replace({ name: 'login', query: {from: routeName} })
 			} else {
-				// TODO 这个组件不是这样用的
 				Vue.$vux.toast.show({
 					text: data.message,
 					type: 'text'
