@@ -61,7 +61,6 @@ export default {
         },
         getStoreList() {
             const _this = this
-            debugger
             this.getLocation().then(() => {
                 const params = {
                     lon: _this.lon,
