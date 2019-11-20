@@ -8,7 +8,8 @@ import {
 	WechatPlugin,
 	AjaxPlugin,
 	XDialog,
-	Confirm
+	Confirm,
+	ToastPlugin
 } from "vux"
 
 Vue.component("x-button", XButton)
@@ -20,3 +21,4 @@ Vue.component('x-dialog', XDialog)
 Vue.component('confirm', Confirm)
 Vue.use(WechatPlugin)
 Vue.use(AjaxPlugin)
+Vue.use(ToastPlugin)

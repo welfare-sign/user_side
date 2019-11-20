@@ -56,6 +56,7 @@ export default {
     flex-direction: column;
     justify-content: space-between;
     overflow: hidden;
+    padding-bottom: 6px;
 }
 h2 {
     width: 100%;

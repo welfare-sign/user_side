@@ -98,6 +98,7 @@ export default {
 @import url('../styles/index');
 .aid-sign {
     .linear-gradient-horizontal();
+    min-height: 100vh;
     padding: 20px @normal-gap;
     position: relative;
 }

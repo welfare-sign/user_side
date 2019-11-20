@@ -156,7 +156,7 @@ export default {
             this.$emit('resign')
         },
         handleShare() {
-            shareDialog.show = true
+            this.shareDialog.show = true
         },
         handlePay() {
             this.$emit('pay')

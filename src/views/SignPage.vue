@@ -74,7 +74,7 @@ export default {
                 title: '分享标题',
                 desc: '分享描述',
                 shareId: '',
-                imgUrl: require('@/assets/icon.jpg')
+                imgUrl: `${window.location.origin}/assets/icon.jpg`
             },
             isAidSign: false
         }
