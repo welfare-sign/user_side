@@ -30,7 +30,6 @@ export function wxAuthority(options) {
     })
   })
   wx.error(err => {
-    debugger
     console.log(err.message)
     // Vue.$vux.toast.show({
     //   text: `微信公众号授权失败${err}`,
