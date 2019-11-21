@@ -148,7 +148,7 @@ export default {
             wx_pay().then(({data}) => {
                 data = JSON.parse(data)
                 this.payDialog.options = data
-                this.payDialog.amount = parseInt((data.payFee)/100)
+                this.payDialog.amount = ((data.payFee)/100).toFixed(2)
                 this.payDialog.show = true
             })
         },
