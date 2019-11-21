@@ -2,7 +2,7 @@
     <w-card class="sign-panel">
         <header>
             <h1>{{isAid ? '补签成功，' : ''}}{{signedTime > 0 ? '已连续签到' + signedTime + '天' : '现在开始福力签'}}</h1>
-            <span>签到规则</span>
+            <span @click="handleRules">签到规则</span>
         </header>
         <main>
             <ul class="sign-list">
@@ -51,6 +51,20 @@
                     <span>遗憾离开</span>
                 </div>
             </x-dialog>
+            <x-dialog
+                v-model="rulesDialog.show"
+                class="rules-dialog"
+                :dialog-style="{'max-width': '100%', 'background-color': 'transparent', 'margin': '97px 30px'}"
+            >
+                <div class="box">
+                    <h2>签到规则</h2>
+                    <p class="content">
+                        *2019年11月1日至11月11日，在优衣库掌上旗舰店注册成为优衣库会员后，根据相关页面提示可在优衣库掌上旗舰店的店铺首页领取“单笔订单满500元减50元”优惠券1张和“单笔订单满1000元减130元”优惠券1张。会员可进入优衣库掌上旗舰店/网络旗舰店在“我的账户”-“我的服务”- “优惠券”中查看已获得的优衣库掌上旗舰店/网络旗舰店优惠券及该券的具体使用规则和期限。
+*2019年11月1日至11月14日，新用户在优衣库微信公众号或优衣库支付宝生活号注册成为会员即可获得价值人民币40元的会员门店礼券；2019年11月8日至11月14日有效使用期内，至中国大陆地区任一可自行独立收银的优衣库实体门店单笔消费满488元  ，可使用本会员门店礼券减免40元。单笔交易限使用1张。具体领取以及使用时间、规则详情请见优衣库掌上旗舰店/网络旗舰店以及全国实体门店内公告。
+                    </p>
+                </div>
+                <div class="rules-close" @click="rulesDialog.show = false"></div>
+            </x-dialog>
         </div>
     </w-card>
 </template>
@@ -83,6 +97,9 @@ export default {
             today: new Date(),
             currentItem: {},
             shareDialog: {
+                show: false
+            },
+            rulesDialog: {
                 show: false
             }
         }
@@ -160,12 +177,16 @@ export default {
         },
         handlePay() {
             this.$emit('pay')
+        },
+        handleRules() {
+            this.rulesDialog.show = true
         }
     }
 }
 </script>
 <style lang="less" scoped>
 @import url('../../styles/variables');
+@import '~vux/src/styles/close.less';
 .sign-panel {
     margin-top: 72px;
     padding: 20px @normal-gap;
@@ -234,5 +255,35 @@ header {
 .qr-code {
     text-align: center;
     color: @main-font-color;
+}
+.rules-dialog {
+    .box {
+        background: #fff;
+        border-radius: @main-radius;
+        height: 345px;
+        padding: 25px;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        & > h2 {
+            padding-bottom: 18px;
+            border-bottom: solid 1px #F0F0F0;
+            margin-bottom: @normal-gap;
+        }
+        & > p {
+            flex: 1;
+            overflow-y: scroll;
+            color: #4D4D4D;
+            font-size: 14px;
+        }
+    }
+    .rules-close {
+        width: 28px;
+        height: 28px;
+        display: inline-block;
+        margin-top: @normal-gap;
+        background: url(../../assets/close.png);
+        background-size: contain;
+    }
 }
 </style>
