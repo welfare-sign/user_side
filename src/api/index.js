@@ -197,3 +197,14 @@ export function query_merchants(params) {
         params
     })
 }
+
+export function get_ad_poster() {
+    /**
+     * @description 随机获取商户一张海报
+     * @return (promise)
+     */
+    return http({
+        url: 'v1/merchants/poster',
+        method: 'get'
+    })
+}

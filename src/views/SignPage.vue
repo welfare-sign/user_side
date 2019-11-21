@@ -22,6 +22,14 @@
                     <span>重新签到</span>
                 </div>
             </x-dialog>
+            <x-dialog
+                v-model="adDialog.show"
+                class="ad-dialog"
+                :dialog-style="{'max-width': '100%', 'background-color': 'transparent', 'margin': '97px 30px'}"
+            >
+            <div class="close"></div>
+            <div class="box" :style="{'background': `url(${adDialog.url})`}"></div>
+            </x-dialog>
         </div>
     </div>
 </template>
@@ -43,13 +51,17 @@ import {
     checkin,
     re_checkin,
     wx_pay,
-    is_supplement
+    is_supplement,
+    get_ad_poster
 } from '@/api/index'
-
-// 依赖
 const wx = require('weixin-js-sdk')
 
+// 依赖
+import Cookies from 'js-cookie'
 import {startWXPay, setWxShare} from '@/plugins/wechat-sdk'
+
+
+import baseUrl from '@/utils/doman'
 
 export default {
     name: 'SignPage',
@@ -76,7 +88,11 @@ export default {
                 shareId: '',
                 imgUrl: `${window.location.origin}/assets/icon.jpg`
             },
-            isAidSign: false
+            isAidSign: false,
+            adDialog: {
+                show: false,
+                url: `${baseUrl}v1/merchants/poster?access_token=${Cookies.get('Authorization')}`
+            }
         }
     },
     created() {
@@ -133,9 +149,10 @@ export default {
             })
         },
         handleSign() {
-            checkin().then(({ res }) => {
-                this.getList()
-            })
+            this.adDialog.show = true
+            // checkin().then(({ res }) => {
+            //     this.getList()
+            // })
         },
         handleResign() {
             this.payDialog.show = false
@@ -215,6 +232,15 @@ export default {
         color: #fff;
         margin-top: 20px;
         text-decoration: underline;
+    }
+}
+.ad-dialog {
+    padding-top: 69px;
+    padding-left: 52px;
+    padding-right: 52px;
+    .box {
+        width: 100%;
+        height: 350px;
     }
 }
 </style>
