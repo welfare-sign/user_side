@@ -19,7 +19,8 @@ http.interceptors.request.use(
 	config => {
 		const url = config.url
 		const loginReg = /login$/
-		if (!loginReg.test(url)) {
+		const wxConfReg = /wx\/config$/
+		if (!loginReg.test(url) && !wxConfReg.test(url)) {
 			const Authorization = Cookies.get('Authorization')
 			const routeName = vm.$route.name
 			if (!Authorization && routeName !== 'login') {

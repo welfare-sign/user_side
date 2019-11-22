@@ -3,7 +3,7 @@
 </template>
 <script>
 // 接口
-import { wx_config, login } from '@/api/index'
+import { login } from '@/api/index'
 // 方法
 import { wxAuthority } from '@/plugins/wechat-sdk'
 
@@ -16,7 +16,7 @@ export default {
     name: 'Login',
     data() {
         return {
-            options: {},
+            // options: {},
             code: ''
         }
     },
@@ -31,24 +31,24 @@ export default {
             this.code = query.code
             sessionStorage.setItem('fromPathName', JSON.stringify(query.from))
         }
-        this.initLogin()
+        // this.initLogin()
         if(this.code) {
             this.handleLogin()
         }
     },
     methods: {
-        initLogin() {
-            const url = location.href
-            wx_config({ url }).then(({ data }) => {
-                this.options = data
-                wxAuthority(this.options)
-            })
-        },
+        // initLogin() {
+        //     const url = location.href
+        //     wx_config({ url }).then(({ data }) => {
+        //         this.options = data
+        //         wxAuthority(this.options)
+        //     })
+        // },
         handleLogin() {
             const _this = this
             if (!this.code) {
                 const searchObj = {
-                    appid: this.options.appid,
+                    appid: sessionStorage.appid,
                     redirect_uri: location.href,
                     response_type: 'code',
                     scope: 'snsapi_userinfo'

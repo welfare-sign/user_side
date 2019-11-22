@@ -25,10 +25,10 @@
             <x-dialog
                 v-model="adDialog.show"
                 class="ad-dialog"
-                :dialog-style="{'max-width': '100%', 'background-color': 'transparent', 'margin': '97px 30px'}"
+                :dialog-style="{'max-width': '100%', 'background-color': 'transparent', 'margin': '97px 30px', 'display': 'flex', 'flex-direction': 'column', 'align-items': 'flex-end'}"
             >
-            <div class="close"></div>
-            <div class="box" :style="{'background': `url(${adDialog.url})`}"></div>
+            <div class="close" @click="handleCloseAd"></div>
+            <div class="box" :style="{'background-image': `url(${adDialog.url})`}"></div>
             </x-dialog>
         </div>
     </div>
@@ -150,9 +150,12 @@ export default {
         },
         handleSign() {
             this.adDialog.show = true
-            // checkin().then(({ res }) => {
-            //     this.getList()
-            // })
+        },
+        handleCloseAd() {
+            checkin().then(({ res }) => {
+                this.getList()
+            })
+            this.adDialog.show = false
         },
         handleResign() {
             this.payDialog.show = false
@@ -238,9 +241,20 @@ export default {
     padding-top: 69px;
     padding-left: 52px;
     padding-right: 52px;
+    .close {
+        width: 26px;
+        height: 26px;
+        background: url(../assets/close_plain.png);
+        background-size: contain;
+        margin-bottom: 25px;
+        margin-right: @normal-gap;
+    }
     .box {
         width: 100%;
         height: 350px;
+        background-size: cover;
+        background-repeat: no-repeat;
+        border-radius: 4px;
     }
 }
 </style>

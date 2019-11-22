@@ -12,6 +12,9 @@ import './plugins/infinit_scroll'
 import 'reset-css'
 import './styles/theme.less'
 
+// 全局设置权限
+import '@/utils/wxAuthority'
+
 Vue.config.productionTip = false
 FastClick.attach(document.body)
 
