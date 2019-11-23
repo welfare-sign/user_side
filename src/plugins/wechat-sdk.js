@@ -49,6 +49,7 @@ export function authority(url) {
 
 export function setWxShare(options) {
   const link = `${shareUrl}?shareid=${options.shareId}`;
+  console.log('分享的路径', link)
   const shareOption = {
     title: options.title, // 分享标题
     desc: options.desc, // 分享描述
@@ -58,6 +59,7 @@ export function setWxShare(options) {
       console.log("分享设置成功");
     }
   };
+  console.log('分享设置', shareOption)
   wx.updateAppMessageShareData(shareOption);
   wx.updateTimelineShareData(shareOption);
 }

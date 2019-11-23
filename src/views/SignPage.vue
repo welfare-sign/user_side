@@ -109,6 +109,7 @@ export default {
                 this.info = data ? data : {}
                 this.shareOptions.shareId = data && data.id
                 // 分享需要当前用户信息所以要拿到用户信息才能设置
+                console.log('获得用户信息，下一步支设置分享', data)
                 this.setShare()
             })
         },
@@ -187,6 +188,7 @@ export default {
             })
         },
         setShare() {
+            console.log('分享设置')
             setWxShare(this.shareOptions)
         }
     }
