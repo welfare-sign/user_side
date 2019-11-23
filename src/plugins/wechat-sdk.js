@@ -2,6 +2,7 @@
 import { wx_config } from "@/api/index";
 
 const wx = require("weixin-js-sdk");
+
 const shareUrl = `${window.location.origin}/aid_sign`;
 
 const jsApiList = [
@@ -14,42 +15,50 @@ const jsApiList = [
 ];
 
 export function wxAuthority(options) {
-  wx.config({
-    debug: false,
-    appId: options.appid, // 必填，公众号的唯一标识
-    timestamp: options.timestamp, // 必填，生成签名的时间戳
-    nonceStr: options.noncestr, // 必填，生成签名的随机串
-    signature: options.signature, // 必填，签名
-    jsApiList // 必填，需要使用的JS接口列表
-  });
-
-  wx.ready(() => {
-    wx.checkJsApi({
-      jsApiList,
-      success(res) {
-        console.log(res);
-      }
+  return new Promise((resolve, reject) => {
+    wx.config({
+      debug: false,
+      appId: options.appid, // 必填，公众号的唯一标识
+      timestamp: options.timestamp, // 必填，生成签名的时间戳
+      nonceStr: options.noncestr, // 必填，生成签名的随机串
+      signature: options.signature, // 必填，签名
+      jsApiList // 必填，需要使用的JS接口列表
     });
-  });
-  wx.error(err => {
-    console.log(err.message);
-    // Vue.$vux.toast.show({
-    //   text: `微信公众号授权失败${err}`,
-    //   type: 'text'
-    // })
+
+    wx.ready(() => {
+      wx.checkJsApi({
+        jsApiList,
+        success(res) {
+          console.log(res);
+        }
+      });
+      resolve();
+    });
+    wx.error(err => {
+      console.log(err.message);
+      // Vue.$vux.toast.show({
+      //   text: `微信公众号授权失败${err}`,
+      //   type: 'text'
+      // })
+      reject();
+    });
   });
 }
 
 export function authority(url) {
-  wx_config({ url }).then(({ data }) => {
-    sessionStorage.setItem("appid", data.appid);
-    wxAuthority(data);
+  return new Promise(resolve => {
+    wx_config({ url }).then(({ data }) => {
+      sessionStorage.setItem("appid", data.appid);
+      wxAuthority(data).then(() => {
+        resolve();
+      });
+    });
   });
 }
 
 export function setWxShare(options) {
   const link = `${shareUrl}?shareid=${options.shareId}`;
-  console.log('分享的路径', link)
+  console.log("分享的路径", link);
   const shareOption = {
     title: options.title, // 分享标题
     desc: options.desc, // 分享描述
@@ -59,7 +68,7 @@ export function setWxShare(options) {
       console.log("分享设置成功");
     }
   };
-  console.log('分享设置', shareOption)
+  console.log("分享设置", shareOption);
   wx.updateAppMessageShareData(shareOption);
   wx.updateTimelineShareData(shareOption);
 }

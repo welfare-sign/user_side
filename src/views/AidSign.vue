@@ -49,8 +49,13 @@ export default {
             this.getList()
         },
         getInfo() {
-            user_detail({customer_id: this.shareId}).then(({ data, res }) => {
-                this.info = data ? data : {}
+            user_detail({customer_id: this.shareId, is_help_checkin_page: true}).then(({ data, res }) => {
+                debugger
+                if (res.code === 'ERR_HELP_CHECKIN_LIMIT') {
+                    this.$router.push({name: 'sign_page'})
+                } else {
+                    this.info = data ? data : {}
+                }
             })
         },
         getList() {
