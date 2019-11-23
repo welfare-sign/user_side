@@ -2,6 +2,7 @@
 import { wx_config } from "@/api/index";
 
 const wx = require("weixin-js-sdk");
+const shareUrl = `${window.location.origin}/aid_sign`
 
 const jsApiList = [
   "updateAppMessageShareData",
@@ -50,7 +51,7 @@ export function setWxShare(options) {
   wx.updateAppMessageShareData({
     title: options.title, // 分享标题
     desc: options.desc, // 分享描述
-    link: `${window.location.origin}/aid_sign?shareid=${options.shareId}`, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+    link: `${shareUrl}?shareid=${options.shareId}`, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
     imgUrl: options.imgUrl, // 分享图标
     success() {
       console.log("分享设置成功");

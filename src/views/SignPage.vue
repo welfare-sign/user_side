@@ -86,7 +86,7 @@ export default {
                 title: '分享标题',
                 desc: '分享描述',
                 shareId: '',
-                imgUrl: `${window.location.origin}/assets/icon.jpg`
+                imgUrl: `${window.location.origin}/static/icon.jpg`
             },
             isAidSign: false,
             adDialog: {
@@ -187,6 +187,7 @@ export default {
             })
         },
         setShare() {
+            debugger
             setWxShare(this.shareOptions)
         }
     }
