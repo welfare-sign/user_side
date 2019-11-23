@@ -50,7 +50,6 @@ export default {
         },
         getInfo() {
             user_detail({customer_id: this.shareId, is_help_checkin_page: true}).then(({ data, res }) => {
-                debugger
                 if (res.code === 'ERR_HELP_CHECKIN_LIMIT') {
                     this.$router.push({name: 'sign_page'})
                 } else {
