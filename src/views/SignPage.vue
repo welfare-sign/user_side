@@ -187,7 +187,6 @@ export default {
             })
         },
         setShare() {
-            debugger
             setWxShare(this.shareOptions)
         }
     }
