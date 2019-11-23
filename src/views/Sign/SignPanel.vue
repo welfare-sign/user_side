@@ -31,24 +31,30 @@
                 >{{signDone ? '已签到' :'签 到'}}</x-button>
             </div>
             <div v-else class="qr-code">
-                <img src="@/assets/qrcode.jpg" width="180" height="180" alt="">
-                <p class="tips">长按扫码关注微信公众号<br>在公众号内领取福利</p>
+                <img src="@/assets/qrcode.jpg" width="180" height="180" alt />
+                <p class="tips">
+                    长按扫码关注微信公众号
+                    <br />在公众号内领取福利
+                </p>
             </div>
         </main>
         <div>
             <x-dialog
                 v-model="shareDialog.show"
                 class="share-dialog"
-                :dialog-style="{'max-width': '100%', height: '50%', 'background-color': 'transparent', 'margin': '112px 34px'}"
+                :dialog-style="{'max-width': '100%', height: '50%', 'background-color': 'transparent', 'margin': '18px 34px'}"
                 hide-on-blur
             >
-                <div class="box">
-                    <h2>你已连续签到</h2>
-                    <div class="box-main-area">{{signedTime}} 天</div>
-                    <div class="remaind-text">继续分享好友即可补签</div>
-                </div>
-                <div class="share-close" @click="shareDialog.show=false">
-                    <span>遗憾离开</span>
+                <div class="share-content">
+                    <div class="empty"></div>
+                    <div class="box">
+                        <h2>你已连续签到</h2>
+                        <div class="box-main-area">{{signedTime}} 天</div>
+                        <div class="remaind-text">继续分享好友即可补签</div>
+                    </div>
+                    <div class="share-close" @click="shareDialog.show=false">
+                        <span>遗憾离开</span>
+                    </div>
                 </div>
             </x-dialog>
             <x-dialog
@@ -60,7 +66,7 @@
                     <h2>签到规则</h2>
                     <p class="content">
                         *2019年11月1日至11月11日，在优衣库掌上旗舰店注册成为优衣库会员后，根据相关页面提示可在优衣库掌上旗舰店的店铺首页领取“单笔订单满500元减50元”优惠券1张和“单笔订单满1000元减130元”优惠券1张。会员可进入优衣库掌上旗舰店/网络旗舰店在“我的账户”-“我的服务”- “优惠券”中查看已获得的优衣库掌上旗舰店/网络旗舰店优惠券及该券的具体使用规则和期限。
-*2019年11月1日至11月14日，新用户在优衣库微信公众号或优衣库支付宝生活号注册成为会员即可获得价值人民币40元的会员门店礼券；2019年11月8日至11月14日有效使用期内，至中国大陆地区任一可自行独立收银的优衣库实体门店单笔消费满488元  ，可使用本会员门店礼券减免40元。单笔交易限使用1张。具体领取以及使用时间、规则详情请见优衣库掌上旗舰店/网络旗舰店以及全国实体门店内公告。
+                        *2019年11月1日至11月14日，新用户在优衣库微信公众号或优衣库支付宝生活号注册成为会员即可获得价值人民币40元的会员门店礼券；2019年11月8日至11月14日有效使用期内，至中国大陆地区任一可自行独立收银的优衣库实体门店单笔消费满488元 ，可使用本会员门店礼券减免40元。单笔交易限使用1张。具体领取以及使用时间、规则详情请见优衣库掌上旗舰店/网络旗舰店以及全国实体门店内公告。
                     </p>
                 </div>
                 <div class="rules-close" @click="rulesDialog.show = false"></div>
@@ -160,10 +166,10 @@ export default {
         },
         returnDay(date) {
             let y = date.getFullYear()
-            let m = date.getMonth()+1
-                m = m > 9 ? m : `0${m}`
+            let m = date.getMonth() + 1
+            m = m > 9 ? m : `0${m}`
             let d = date.getDate()
-                d = d > 9 ? d : `0${d}`
+            d = d > 9 ? d : `0${d}`
             return new Date(`${y}/${m}/${d}`)
         },
         handleSign() {
@@ -222,6 +228,18 @@ header {
     font-size: @sub-title-font-size;
     line-height: 20px;
     font-weight: 400;
+    .share-content {
+        position: relative;
+    }
+    .empty {
+        width: 100%;
+        height: 79px;
+        background-image: url(../../assets/arrow.png);
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: right;
+        margin-bottom: 15px;
+    }
     .box {
         padding: @assist-gap;
         border-radius: @main-radius;
@@ -267,13 +285,13 @@ header {
         flex-direction: column;
         & > h2 {
             padding-bottom: 18px;
-            border-bottom: solid 1px #F0F0F0;
+            border-bottom: solid 1px #f0f0f0;
             margin-bottom: @normal-gap;
         }
         & > p {
             flex: 1;
             overflow-y: scroll;
-            color: #4D4D4D;
+            color: #4d4d4d;
             font-size: 14px;
         }
     }

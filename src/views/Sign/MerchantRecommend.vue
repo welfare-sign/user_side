@@ -4,7 +4,7 @@
             <h1>附近福利店铺</h1>
             <span class="text-btn" @click="showAll">查看全部</span>
         </header>
-        <group>
+        <group v-if="storeList.length">
             <cell-box v-for="item in storeList" :key="item.id">
                 <w-merchant-item
                     :name="item.store_name"
@@ -14,6 +14,9 @@
                 />
             </cell-box>
         </group>
+        <div class="empty" v-else>
+            您附近暂时还没有店家！
+        </div>
         <footer @click="showAll">
             <span class="text-btn">查看全部店铺</span>
         </footer>
@@ -88,5 +91,9 @@ footer {
 }
 .text-btn {
     color: @primary-color;
+}
+.empty {
+    text-align: center;
+    color: @assist-font-color;
 }
 </style>
