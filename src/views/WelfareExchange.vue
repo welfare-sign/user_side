@@ -27,6 +27,61 @@
         <footer>
             <x-button type="primary" :disabled="!selected" @click.native="handleExchange">领取福利</x-button>
         </footer>
+        <x-dialog
+            v-model="mobileDialog.show"
+            class="mobile-dialog"
+            :dialog-style="{'max-width': '100%', 'background-color': 'transparent', 'margin': '184px 34px'}"
+        >
+            <div class="box">
+                <div class="content">
+                    <h2 class="title">输入手机号，领取您的福利</h2>
+                    <group class="form-group">
+                        <x-input
+                            placeholder="请输入手机号"
+                            type="text"
+                            is-type="china-mobile"
+                            v-model="mobile"
+                        >
+                            <w-countdown
+                                slot="right"
+                                v-model="countStart"
+                                :color="countColor"
+                                @click-event="handleStart"
+                            />
+                        </x-input>
+                        <x-input placeholder="请输入验证码" v-model="code"></x-input>
+                    </group>
+                </div>
+                <div class="btn">
+                    <x-button
+                        mini
+                        type="primary"
+                        @click.native="exchange"
+                        :disabled="exchangeDisabled"
+                    >领取福利</x-button>
+                </div>
+            </div>
+        </x-dialog>
+        <x-dialog
+            v-model="emptyDialog.show"
+            class="empty-dialog"
+            :dialog-style="{'max-width': '100%', 'background-color': 'transparent', 'margin': '184px 34px'}"
+        >
+            <div class="box">
+                <div class="content">
+                    <div class="pic"></div>
+                    <p>你还没有完成签到任务哦<br>赶快去签到吧~</p>
+                </div>
+                <div class="btn">
+                    <x-button
+                        mini
+                        type="primary"
+                        @click.native="handleGoSign"
+                        :disabled="exchangeDisabled"
+                    >去签到</x-button>
+                </div>
+            </div>
+        </x-dialog>
     </div>
 </template>
 <script>
@@ -37,45 +92,103 @@
 // 组件
 import WCard from '@/components/WCard'
 import WMerchantItem from '@/components/WMerchantItem'
+import WCountdown from '@/components/WCountdown'
 
 // 接口
-import { issue_list, get_issue } from '@/api/index'
+import { user_detail, near_merchant, get_issue, verify_code } from '@/api/index'
 // 依赖
 import Qs from 'qs'
 import baseUrl from '@/utils/doman'
+const wx = require('weixin-js-sdk')
+
+// 常量
+const mobileRegx = /^(0|86|17951)?(13[0-9]|15[012356789]|166|17[3678]|18[0-9]|14[57])[0-9]{8}$/
 export default {
     name: 'WelfareExchange',
     components: {
         WCard,
-        WMerchantItem
+        WMerchantItem,
+        WCountdown
     },
     data() {
         return {
             selected: '',
-            list: []
+            list: [],
+            lon: '',
+            lat: '',
+            mobile: '',
+            code: '',
+            countStart: false,
+            mobileDialog: {
+                show: false
+            },
+            emptyDialog: {
+                show: false
+            }
         }
     },
     computed: {
-        welfareList () {
+        welfareList() {
             return this.list.map(item => {
-                item = item.merchant
-                item.desc = `签到5天，即享${item.total_receive}瓶啤酒`
+                // debugger
+                // item = item.merchant
+                item.desc = `签到${item.checkin_days}天，即享${item.checkin_num}瓶啤酒`
                 const file = {
                     filename: item.store_avatar,
                     type: 'avatar'
                 }
-                item.store_avatar = `${baseUrl}v1/files/download?${Qs.stringify(file)}`
+                item.store_avatar = `${baseUrl}v1/files/download?${Qs.stringify(
+                    file
+                )}`
                 return item
             })
+        },
+        countColor() {
+            if (mobileRegx.test(this.mobile)) {
+                return '#FF5F00'
+            } else {
+                return '#666'
+            }
+        },
+        exchangeDisabled() {
+            return !(mobileRegx.test(this.mobile) && this.code)
         }
     },
     created() {
         this.initExchage()
+        this.initUser()
     },
     methods: {
+        initUser() {
+            user_detail().then(({ data }) => {
+                this.mobile = data.mobile
+            })
+        },
         initExchage() {
-            issue_list().then(({data}) => {
-                this.list = data
+            const _this = this
+            this.getLocation().then(() => {
+                const params = {
+                    lon: _this.lon,
+                    lat: _this.lat,
+                    distince: 9999999,
+                    num: 999999
+                }
+                near_merchant(params).then(({ data, res }) => {
+                    _this.list = data ? data : []
+                })
+            })
+        },
+        getLocation() {
+            const _this = this
+            return new Promise((resolve, reject) => {
+                wx.getLocation({
+                    type: 'wgs84',
+                    success: res => {
+                        _this.lon = res.longitude
+                        _this.lat = res.latitude
+                        resolve()
+                    }
+                })
             })
         },
         handleSelect(id) {
@@ -88,16 +201,46 @@ export default {
             this.selected = id
         },
         handleExchange() {
-            const data = {
-                merchant_id: this.selected
+            if (this.mobile) {
+                this.exchange()
+            } else {
+                this.mobileDialog.show = true
             }
-            get_issue(data).then(({res}) => {
-                this.$vux.toast.show({
-                    type: 'text',
-                    text: res.message
-                })
+        },
+        exchange() {
+            const data = {
+                merchant_id: this.selected,
+                mobile: this.mobile,
+                code: this.code
+            }
+            get_issue(data).then(({ res }) => {
+                this.mobileDialog.show = false
+                if (res.code === 'ERR_NO_WELFARE') {
+                    this.emptyDialog.show = true
+                } else {
+                    this.$vux.toast.show({
+                        type: 'text',
+                        text: res.message
+                    })
+                }
                 this.initExchage()
             })
+        },
+        handleStart() {
+            const _this = this
+            if (mobileRegx.test(this.mobile)) {
+                verify_code({ mobile: this.mobile }).then(({ res }) => {
+                    // debugger
+                    _this.$vux.toast.show({
+                        type: 'text',
+                        text: '验证码发送成功'
+                    })
+                    _this.countStart = true
+                })
+            }
+        },
+        handleGoSign() {
+            this.$router.replace({name: 'sign_page'})
         }
     }
 }
@@ -167,5 +310,44 @@ footer {
     height: 46px;
     padding: 10px @normal-gap;
     background: #fafafa;
+}
+.mobile-dialog, .empty-dialog {
+    .box {
+        background: #fff;
+        border-radius: @main-radius;
+        .content {
+            padding: @normal-gap 18px;
+        }
+        .btn {
+            padding: @assist-gap;
+            border-top: 1px solid #e6e6e6;
+            &>button {
+                width: 140px;
+            }
+        }
+    }
+    /deep/ .weui-cells:after {
+        content: none;
+    }
+    /deep/ .weui-cell:before {
+        content: none;
+    }
+    /deep/ .vux-x-input {
+        background: #F0F0F0;
+        border-radius: 44px;
+        margin-top: @assist-gap;
+        font-size: @normal-font-size;
+    }
+}
+.empty-dialog {
+    font-size: @normal-font-size;
+    .pic {
+        width: 163px;
+        height: 135px;
+        margin: @normal-gap auto;
+        background-image: url(../assets/welfare_exchange_failed.png);
+        background-repeat: no-repeat;
+        background-size: contain;
+    }
 }
 </style>

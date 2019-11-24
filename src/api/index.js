@@ -208,3 +208,18 @@ export function get_ad_poster() {
         method: 'get'
     })
 }
+
+export function verify_code(params) {
+    /**
+     * @description 发送验证码
+     * @return (promise)
+     * 
+     * @params (object):
+     *  @mobile (string): 手机号
+     */
+    return http({
+        url: 'v1/verify_code',
+        method: 'get',
+        params
+    })
+}

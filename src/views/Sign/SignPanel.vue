@@ -15,7 +15,7 @@
                     :key="item.id"
                 />
             </ul>
-            <div v-if="signedTime < 5">
+            <div v-if="signedTime > 5">
                 <div v-if="haveMissed">
                     <div class="missed-btn">
                         <x-button type="primary" @click.native="handleShare">分享补签</x-button>
@@ -30,12 +30,12 @@
                     v-else
                 >{{signDone ? '已签到' :'签 到'}}</x-button>
             </div>
-            <div v-else class="qr-code">
-                <img src="@/assets/qrcode.jpg" width="180" height="180" alt />
-                <p class="tips">
-                    长按扫码关注微信公众号
-                    <br />在公众号内领取福利
-                </p>
+            <div v-else class="sign-done">
+                <p class="done-text">您已连续签到5天，关注公众号领福利吧</p>
+                <x-button
+                    type="primary"
+                    @click.native="showQrCode"
+                >领取福利</x-button>
             </div>
         </main>
         <div>
@@ -71,6 +71,19 @@
                 </div>
                 <div class="rules-close" @click="rulesDialog.show = false"></div>
             </x-dialog>
+            <x-dialog
+            v-model="qrCodeDialog.show"
+            class="empty-dialog"
+            :dialog-style="{'max-width': '100%', 'background-color': 'transparent', 'margin': '184px 34px'}"
+        >
+            <div class="qr-code">
+                <img src="@/assets/qrcode.jpg" width="180" height="180" alt />
+                <p class="tips">
+                    长按扫码关注微信公众号
+                    <br />在公众号内领取福利
+                </p>
+            </div>
+        </x-dialog>
         </div>
     </w-card>
 </template>
@@ -106,6 +119,9 @@ export default {
                 show: false
             },
             rulesDialog: {
+                show: false
+            },
+            qrCodeDialog: {
                 show: false
             }
         }
@@ -186,6 +202,9 @@ export default {
         },
         handleRules() {
             this.rulesDialog.show = true
+        },
+        showQrCode() {
+            this.qrCodeDialog.show = true
         }
     }
 }
@@ -270,10 +289,6 @@ header {
         text-decoration: underline;
     }
 }
-.qr-code {
-    text-align: center;
-    color: @main-font-color;
-}
 .rules-dialog {
     .box {
         background: #fff;
@@ -303,5 +318,19 @@ header {
         background: url(../../assets/close.png);
         background-size: contain;
     }
+}
+.sign-done {
+    text-align: center;
+    color: @primary-color;
+    .done-text {
+        margin-bottom: @assist-gap;
+    }
+}
+.qr-code {
+    background: #fff;
+    border-radius: @main-radius;
+    text-align: center;
+    color: @main-font-color;
+    padding-top: 24px;
 }
 </style>
