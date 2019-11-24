@@ -18,7 +18,9 @@
                     :key="item.id"
                 />
             </ul>
-            <x-button type="primary" @click.native="handleAidSign" :disabled="!haveMissed">{{haveMissed ? '签到助力' : '补签成功'}}</x-button>
+            <!-- <x-button type="primary" @click.native="handleAidSign" :disabled="!haveMissed">{{haveMissed ? '签到助力' : '补签成功'}}</x-button> -->
+            <x-button type="primary" @click.native="handleAidSign" v-if="haveMissed">签到助力</x-button>
+            <p class="aid-success" v-else>已帮好友助力，你也去签到领福利吧</p>
             <x-button type="primary" @click.native="handleGoto" v-if="!haveMissed">我也要福利</x-button>
         </main>
     </w-card>
@@ -127,5 +129,10 @@ header {
     margin: 20px 0;
     display: flex;
     justify-content: space-between;
+}
+.aid-success {
+    color: @primary-color;
+    text-align: center;
+    margin-bottom: @assist-gap;
 }
 </style>

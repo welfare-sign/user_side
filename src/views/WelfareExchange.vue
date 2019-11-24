@@ -53,57 +53,6 @@ export default {
         return {
             selected: '',
             list: []
-            // list: [
-            //     {
-            //         id: '1',
-            //         name: '西域狼烧烤（云南路店）',
-            //         address: '云南南路100号',
-            //         desc: '签到5天，即享30瓶啤酒',
-            //         logo: require('@/assets/imgs/1.png')
-            //     },
-            //     {
-            //         id: '2',
-            //         name: '小付烧烤（云南路店）',
-            //         address: '云南南路100号',
-            //         desc: '签到5天，即享30瓶啤酒',
-            //         logo: require('@/assets/imgs/2.png')
-            //     },
-            //     {
-            //         id: '3',
-            //         name: '新疆麦麦提烧烤（云南路店）',
-            //         address: '云南南路100号',
-            //         desc: '签到5天，即享30瓶啤酒',
-            //         logo: require('@/assets/imgs/3.png')
-            //     },
-            //     {
-            //         id: '4',
-            //         name: '新疆麦麦提烧烤（云南路店）',
-            //         address: '云南南路100号',
-            //         desc: '签到5天，即享30瓶啤酒',
-            //         logo: require('@/assets/imgs/4.png')
-            //     },
-            //     {
-            //         id: '5',
-            //         name: '新疆麦麦提烧烤（云南路店）',
-            //         address: '云南南路100号',
-            //         desc: '签到5天，即享30瓶啤酒',
-            //         logo: require('@/assets/imgs/5.png')
-            //     },
-            //     {
-            //         id: '6',
-            //         name: '新疆麦麦提烧烤（云南路店）',
-            //         address: '云南南路100号',
-            //         desc: '签到5天，即享30瓶啤酒',
-            //         logo: require('@/assets/imgs/6.png')
-            //     },
-            //     {
-            //         id: '7',
-            //         name: '新疆麦麦提烧烤（云南路店）',
-            //         address: '云南南路100号',
-            //         desc: '签到5天，即享30瓶啤酒',
-            //         logo: require('@/assets/imgs/7.jpeg')
-            //     }
-            // ]
         }
     },
     computed: {

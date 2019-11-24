@@ -63,14 +63,21 @@ export function setWxShare(options) {
     title: options.title, // 分享标题
     desc: options.desc, // 分享描述
     link, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-    imgUrl: options.imgUrl, // 分享图标
+    imgUrl: options.imgUrl // 分享图标
+  };
+  console.log("分享设置", shareOption);
+  wx.updateAppMessageShareData({
+    ...shareOption,
     success() {
       console.log("分享设置成功");
     }
-  };
-  console.log("分享设置", shareOption);
-  wx.updateAppMessageShareData(shareOption);
-  wx.updateTimelineShareData(shareOption);
+  });
+  wx.updateTimelineShareData({
+    ...shareOption,
+    success() {
+      console.log("分享设置成功");
+    }
+  });
 }
 
 export function startWXPay(options) {
