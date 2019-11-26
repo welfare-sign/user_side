@@ -32,10 +32,7 @@
             </div>
             <div v-else class="sign-done">
                 <p class="done-text">您已连续签到5天，关注公众号领福利吧</p>
-                <x-button
-                    type="primary"
-                    @click.native="showQrCode"
-                >领取福利</x-button>
+                <x-button type="primary" @click.native="showQrCode">领取福利</x-button>
             </div>
         </main>
         <div>
@@ -72,18 +69,18 @@
                 <div class="rules-close" @click="rulesDialog.show = false"></div>
             </x-dialog>
             <x-dialog
-            v-model="qrCodeDialog.show"
-            class="empty-dialog"
-            :dialog-style="{'max-width': '100%', 'background-color': 'transparent', 'margin': '184px 34px'}"
-        >
-            <div class="qr-code">
-                <img src="@/assets/qrcode.jpg" width="180" height="180" alt />
-                <p class="tips">
-                    长按扫码关注微信公众号
-                    <br />在公众号内领取福利
-                </p>
-            </div>
-        </x-dialog>
+                v-model="qrCodeDialog.show"
+                class="empty-dialog"
+                :dialog-style="{'max-width': '100%', 'background-color': 'transparent', 'margin': '153px 34px'}"
+            >
+                <div class="qr-code">
+                    <img src="@/assets/qrcode.jpg" width="200" height="200" alt />
+                    <p class="tips">
+                        长按扫码关注微信公众号
+                        <br />在公众号内领取福利
+                    </p>
+                </div>
+            </x-dialog>
         </div>
     </w-card>
 </template>
@@ -331,6 +328,11 @@ header {
     border-radius: @main-radius;
     text-align: center;
     color: @main-font-color;
-    padding-top: 24px;
+    padding-top: 14px;
+    .tips {
+        margin-top: 14px;
+        border-top: 1px solid #E6E6E6;
+        padding: 14px 0;
+    }
 }
 </style>

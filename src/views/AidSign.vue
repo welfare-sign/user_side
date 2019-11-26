@@ -68,7 +68,8 @@ export default {
             this.getLocation().then(() => {
                 const params = {
                     lon: _this.lon,
-                    lat: _this.lat
+                    lat: _this.lat,
+                    distince: 99999
                 }
                 near_merchant(params).then(({ data, res }) => {
                     _this.merchantList = data ? data : []

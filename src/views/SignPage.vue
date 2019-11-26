@@ -27,8 +27,8 @@
                 class="ad-dialog"
                 :dialog-style="{'max-width': '100%', 'background-color': 'transparent', 'margin': '97px 30px', 'display': 'flex', 'flex-direction': 'column', 'align-items': 'flex-end'}"
             >
-            <div class="close" @click="handleCloseAd"></div>
             <div class="box" :style="{'background-image': `url(${adDialog.url})`}"></div>
+            <div class="close" @click="handleCloseAd"></div>
             </x-dialog>
         </div>
     </div>
@@ -124,7 +124,8 @@ export default {
             this.getLocation().then(() => {
                 const params = {
                     lon: _this.lon,
-                    lat: _this.lat
+                    lat: _this.lat,
+                    distince: 99999
                 }
                 near_merchant(params).then(({ data, res }) => {
                     _this.merchantList = data ? data : []
@@ -248,8 +249,7 @@ export default {
         height: 26px;
         background: url(../assets/close_plain.png);
         background-size: contain;
-        margin-bottom: 25px;
-        margin-right: @normal-gap;
+        margin: 32px auto;
     }
     .box {
         width: 100%;
