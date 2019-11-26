@@ -245,10 +245,11 @@ export default {
     padding-left: 52px;
     padding-right: 52px;
     .close {
-        width: 26px;
-        height: 26px;
+        width: 26px * 3;
+        height: 26px * 3;
         background: url(../assets/close_plain.png);
         background-size: contain;
+        background-repeat: no-repeat;
         margin: 32px auto;
     }
     .box {
