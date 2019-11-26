@@ -16,7 +16,7 @@
                 />
             </ul>
             <div v-if="signedTime < 5">
-                <div v-if="!haveMissed">
+                <div v-if="haveMissed">
                     <div class="missed-btn">
                         <x-button type="primary" @click.native="handleShare">分享补签</x-button>
                         <x-button type="primary" plain @click.native="handlePay">出血补签</x-button>
