@@ -8,8 +8,8 @@ import { login } from '@/api/index'
 import { wxAuthority } from '@/plugins/wechat-sdk'
 
 // 依赖
-import Qs from 'qs'
 import Cookies from 'js-cookie'
+import Qs from 'qs'
 const location = window.location
 const wx_authrity_url = 'https://open.weixin.qq.com/connect/oauth2/authorize?'
 export default {
@@ -37,13 +37,6 @@ export default {
         }
     },
     methods: {
-        // initLogin() {
-        //     const url = location.href
-        //     wx_config({ url }).then(({ data }) => {
-        //         this.options = data
-        //         wxAuthority(this.options)
-        //     })
-        // },
         handleLogin() {
             const _this = this
             if (!this.code) {

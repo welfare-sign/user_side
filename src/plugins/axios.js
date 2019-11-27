@@ -23,7 +23,7 @@ http.interceptors.request.use(
 		if (!loginReg.test(url) && !wxConfReg.test(url)) {
 			const Authorization = Cookies.get('Authorization')
 			const routeName = vm.$route.name
-			if (!Authorization && routeName !== 'login') {
+			if (!Authorization && routeName !== 'login' && routeName !== 'aid_sign') {
 				router.push({ name: 'login', query: {from: routeName}})
 			} else {
 				config.headers.Authorization = Authorization

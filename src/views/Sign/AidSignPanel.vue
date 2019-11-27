@@ -8,20 +8,9 @@
             </div>
         </header>
         <main>
-            <ul class="sign-list">
-                <w-sign-item
-                    v-for="item in signList"
-                    :signed="item.signed"
-                    :missed="item.missed"
-                    :final="item.final"
-                    :label="item.label"
-                    :key="item.id"
-                />
-            </ul>
-            <!-- <x-button type="primary" @click.native="handleAidSign" :disabled="!haveMissed">{{haveMissed ? '签到助力' : '补签成功'}}</x-button> -->
-            <x-button type="primary" @click.native="handleAidSign" v-if="haveMissed">签到助力</x-button>
+            <x-button type="primary" @click.native="handleAidSign" v-if="aidAble">签到助力</x-button>
             <p class="aid-success" v-else>已帮好友助力，你也去签到领福利吧</p>
-            <x-button type="primary" @click.native="handleGoto" v-if="!haveMissed">我也要福利</x-button>
+            <x-button type="primary" @click.native="handleGoto" v-if="!aidAble">我也要福利</x-button>
         </main>
     </w-card>
 </template>
@@ -44,58 +33,17 @@ export default {
             type: Object,
             required: true
         },
-        list: {
-            type: Array,
-            required: true
+        aidAble: {
+            type: Boolean,
+            default: true
         }
     },
     data() {
         return {
-            today: new Date(),
-            currentItem: null,
             shareId: ''
         }
     },
-    computed: {
-        signList() {
-            const _this = this
-            const list = this.list.map((item, index, arr) => {
-                if (index === arr.length - 1) {
-                    item.final = true
-                }
-                switch (item.status) {
-                    case 'U':
-                        item.signed = false
-                        break
-                    case 'A':
-                        item.signed = true
-                        break
-                    default:
-                        break
-                }
-                const diff = this.isMissed(
-                    this.today,
-                    new Date(item.need_checkin_time)
-                )
-                item.missed = (diff >= 1 && !item.signed)
-                item.label = `第${item.day}天`
-                if (item.missed && !_this.currentItem) {
-                    _this.currentItem = item
-                }
-                return item
-            })
-            return list
-        },
-        haveMissed() {
-            const missedIndex = this.signList.findIndex(item => item.missed)
-            return missedIndex > -1
-        }
-    },
     methods: {
-        isMissed(today, needDate) {
-            const diff = (today - needDate) / (1000 * 60 * 60 * 24)
-            return diff
-        },
         handleAidSign() {
             this.$emit('aid-sign')
         },
