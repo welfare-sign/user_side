@@ -77,7 +77,6 @@
                         mini
                         type="primary"
                         @click.native="handleGoSign"
-                        :disabled="exchangeDisabled"
                     >去签到</x-button>
                 </div>
             </div>
