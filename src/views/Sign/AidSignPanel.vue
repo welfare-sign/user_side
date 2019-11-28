@@ -3,7 +3,7 @@
         <header>
             <x-img :default-src="info.headimgurl" class="avatar" />
             <div class="content">
-                <span class="user">{{info.nickname}}：</span>
+                <h1 class="user">{{info.nickname}}</h1>
                 <h2>“在福力签薅羊毛，一起签到领啤酒”</h2>
             </div>
         </header>
@@ -61,14 +61,22 @@ export default {
     background: #fff;
 }
 header {
-    display: flex;
+    // display: flex;
     padding: 8px 0;
+    text-align: center;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #E6E6E6;
+    margin-bottom: 20px;
+    &>h1 {
+        padding: 10px 0;
+    }
 }
 .avatar {
     width: 40px;
     height: 40px;
     border-radius: 20px;
     margin-right: 10px;
+    border: 2px solid #E6E6E6;
 }
 .user {
     font-size: @assist-font-size;
