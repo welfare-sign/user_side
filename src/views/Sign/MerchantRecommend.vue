@@ -2,7 +2,7 @@
     <w-card class="merchant-recommend">
         <header>
             <h1>附近福利店铺</h1>
-            <span class="text-btn" @click="showAll">查看全部</span>
+            <span class="text-btn" @click="showAll">更多</span>
         </header>
         <group v-if="storeList.length">
             <cell-box v-for="item in storeList" :key="item.id">

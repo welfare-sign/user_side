@@ -67,18 +67,11 @@
             class="empty-dialog"
             :dialog-style="{'max-width': '100%', 'background-color': 'transparent', 'margin': '184px 34px'}"
         >
-            <div class="box">
-                <div class="content">
-                    <div class="pic"></div>
-                    <p>你还没有完成签到任我哦</p>
-                </div>
-                <div class="btn">
-                    <x-button
-                        mini
-                        type="primary"
-                        @click.native="handleGoSign"
-                    >去签到</x-button>
-                </div>
+            <div class="box" @click="handleDone(emptyDialog.routeName)">
+                <img :src="emptyDialog.imgUrl" class="pic" alt="">
+                <!-- <div class="content">
+                    <div class="pic" :style="{'background-image': `url(${emptyDialog.imgUrl})`}"></div>
+                </div> -->
             </div>
         </x-dialog>
     </div>
@@ -123,7 +116,9 @@ export default {
                 show: false
             },
             emptyDialog: {
-                show: false
+                show: false,
+                imgUrl: '',
+                routeName: ''
             }
         }
     },
@@ -217,6 +212,12 @@ export default {
                 this.mobileDialog.show = false
                 if (res.code === 'ERR_NO_WELFARE') {
                     this.emptyDialog.show = true
+                    this.emptyDialog.routeName = 'sign_page'
+                    this.emptyDialog.imgUrl = require('@/assets/welfare_exchange_failed.png')
+                } else if (res.code === 'SUCCESS') {
+                    this.emptyDialog.show = true
+                    this.emptyDialog.routeName = 'my_welfare'
+                    this.emptyDialog.imgUrl = require('@/assets/welfare_exchange_success.png')
                 } else {
                     this.$vux.toast.show({
                         type: 'text',
@@ -239,8 +240,8 @@ export default {
                 })
             }
         },
-        handleGoSign() {
-            this.$router.replace({name: 'sign_page'})
+        handleDone(name) {
+            this.$router.replace({name})
         }
     }
 }
@@ -311,7 +312,7 @@ footer {
     padding: 10px @normal-gap;
     background: #fafafa;
 }
-.mobile-dialog, .empty-dialog {
+.mobile-dialog {
     .box {
         background: #fff;
         border-radius: @main-radius;
@@ -342,12 +343,7 @@ footer {
 .empty-dialog {
     font-size: @normal-font-size;
     .pic {
-        width: 163px;
-        height: 135px;
-        margin: @normal-gap auto;
-        background-image: url(../assets/welfare_exchange_failed.png);
-        background-repeat: no-repeat;
-        background-size: contain;
+        width: 307px;
     }
 }
 </style>

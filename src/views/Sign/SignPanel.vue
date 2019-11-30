@@ -92,6 +92,7 @@
 // 组件
 import WCard from '@/components/WCard'
 import WSignItem from '@/components/WSignItem'
+import { setWxShare } from '@/plugins/wechat-sdk'
 export default {
     name: 'SignPanel',
     components: {
@@ -106,6 +107,9 @@ export default {
         isAid: {
             type: Boolean,
             default: false
+        },
+        shareOptions: {
+            type: Object
         }
     },
     data() {
@@ -192,15 +196,12 @@ export default {
             this.$emit('resign')
         },
         handleShare() {
-            setWxShare(
-                {
-                    title: '分享标题',
-                    desc: '分享描述',
-                    shareId: '',
-                    imgUrl: `${window.location.origin}/static/icon.jpg`
-                },
-                true
-            )
+            const options = {
+                ...this.shareOptions,
+                title: '分享帮签标题',
+                desc: '分享帮签描述'
+            }
+            setWxShare(options, true)
             this.shareDialog.show = true
         },
         handlePay() {

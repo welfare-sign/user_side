@@ -1,6 +1,13 @@
 <template>
     <div class="sign-page">
-        <sign-panel @sign="handleSign" @resign="handleResign" @pay="handlePay" :list="list" :is-aid="isAidSign" />
+        <sign-panel
+            @sign="handleSign"
+            @resign="handleResign"
+            @pay="handlePay"
+            :list="list"
+            :is-aid="isAidSign"
+            :share-options="shareOptions"
+        />
         <user-info :info="info" />
         <merchant-recommend :list="merchantList" />
         <div>
@@ -11,11 +18,11 @@
                 hide-on-blur
             >
                 <div class="box">
-                    <img class="wx-logo" src="@/assets/wechat-pay.png"/>
+                    <img class="wx-logo" src="@/assets/wechat-pay.png" />
                     <p>微信支付{{payDialog.amount}}元即可补签</p>
                     <div class="btn-group">
                         <span class="cancel" @click="handleCancel">我再想想</span>
-                        <span class="confirm" @click="handleConfirm">微信支付</span>
+                        <span class="confirm" @click="Confirm">微信支付</span>
                     </div>
                 </div>
                 <div class="pay-close" @click="handleResign">
@@ -27,9 +34,18 @@
                 class="ad-dialog"
                 :dialog-style="{'max-width': '100%', 'background-color': 'transparent', 'margin': '97px 30px', 'display': 'flex', 'flex-direction': 'column', 'align-items': 'flex-end'}"
             >
-            <div class="box" :style="{'background-image': `url(${adDialog.url})`}"></div>
-            <div class="close" @click="handleCloseAd"></div>
+                <div class="box" :style="{'background-image': `url(${adDialog.url})`}"></div>
+                <div class="close" @click="handleCloseAd"></div>
             </x-dialog>
+            <confirm
+                v-model="confirmShow"
+                :close-on-confirm="false"
+                title="确认要重新签到？"
+                @on-confirm="handleReSignConfirm"
+                @on-cancel="handleReSingCancel"
+            >
+                <p style="text-align:center;">重新签到会消除您之前的签到记录，是否继续？</p>
+            </confirm>
         </div>
     </div>
 </template>
@@ -58,8 +74,7 @@ const wx = require('weixin-js-sdk')
 
 // 依赖
 import Cookies from 'js-cookie'
-import {startWXPay, setWxShare} from '@/plugins/wechat-sdk'
-
+import { startWXPay, setWxShare } from '@/plugins/wechat-sdk'
 
 import baseUrl from '@/utils/doman'
 
@@ -91,8 +106,11 @@ export default {
             isAidSign: false,
             adDialog: {
                 show: false,
-                url: `${baseUrl}v1/merchants/poster?access_token=${Cookies.get('Authorization')}`
-            }
+                url: `${baseUrl}v1/merchants/poster?access_token=${Cookies.get(
+                    'Authorization'
+                )}`
+            },
+            confirmShow: false
         }
     },
     created() {
@@ -146,7 +164,7 @@ export default {
             })
         },
         getSignStatus() {
-            is_supplement().then(({data, res}) => {
+            is_supplement().then(({ data, res }) => {
                 this.isAidSign = data
             })
         },
@@ -161,23 +179,30 @@ export default {
         },
         handleResign() {
             this.payDialog.show = false
+            this.confirmShow = true
+        },
+        handleReSignConfirm() {
             re_checkin().then(res => {
                 console.log('重新签到执行成功', res)
+                this.confirmShow = false
                 this.getList()
             })
         },
+        handleReSingCancel() {
+            this.confirmShow = false
+        },
         handlePay() {
-            wx_pay().then(({data}) => {
+            wx_pay().then(({ data }) => {
                 data = JSON.parse(data)
                 this.payDialog.options = data
-                this.payDialog.amount = ((data.payFee)/100).toFixed(2)
+                this.payDialog.amount = (data.payFee / 100).toFixed(2)
                 this.payDialog.show = true
             })
         },
         handleCancel() {
             this.payDialog.show = false
         },
-        handleConfirm() {
+        Confirm() {
             startWXPay(this.payDialog.options).then(res => {
                 console.log('支付成功', res)
                 this.payDialog.show = false
@@ -202,6 +227,9 @@ export default {
     padding-right: @normal-gap;
     padding-bottom: 20px;
     position: relative;
+    /deep/ .weui-dialog__btn_primary {
+        color: @primary-color;
+    }
 }
 .pay-dialog {
     font-size: @sub-title-font-size;
@@ -221,7 +249,7 @@ export default {
             margin-top: 26px;
             border-top: 1px solid rgba(0, 0, 0, 0.1);
             display: flex;
-            &>span {
+            & > span {
                 flex: 1;
                 display: block;
                 padding: @assist-gap 0;
@@ -230,7 +258,7 @@ export default {
                 color: @normal-font-color;
             }
             .confirm {
-                color: #1FBB22;
+                color: #1fbb22;
             }
         }
     }
