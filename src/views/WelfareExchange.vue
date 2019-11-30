@@ -70,7 +70,7 @@
             <div class="box">
                 <div class="content">
                     <div class="pic"></div>
-                    <p>你还没有完成签到任务哦<br>赶快去签到吧~</p>
+                    <p>你还没有完成签到任我哦</p>
                 </div>
                 <div class="btn">
                     <x-button

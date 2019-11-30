@@ -52,12 +52,13 @@ export default {
     computed: {
         welfareList () {
             return this.list.map(item => {
+                const desc = `存有${item.total_receive - item.received}瓶啤酒`
                 item = item.merchant
-                item.desc = `存有${item.total_receive}瓶啤酒`
                 const file = {
                     filename: item.store_avatar,
                     type: 'avatar'
                 }
+                item.desc = desc
                 item.store_avatar = `${baseUrl}v1/files/download?${Qs.stringify(file)}`
                 return item
             })

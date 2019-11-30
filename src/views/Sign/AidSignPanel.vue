@@ -4,12 +4,12 @@
             <x-img :default-src="info.headimgurl" class="avatar" />
             <div class="content">
                 <h1 class="user">{{info.nickname}}</h1>
-                <h2>“在福力签薅羊毛，一起签到领啤酒”</h2>
+                <h2>“我的30瓶啤酒，就靠你了！”</h2>
             </div>
         </header>
         <main>
             <x-button type="primary" @click.native="handleAidSign" v-if="aidAble">签到助力</x-button>
-            <p class="aid-success" v-else>已帮好友助力，你也去签到领福利吧</p>
+            <p class="aid-success" v-else>已帮好友补签，看看你能领什么？</p>
             <x-button type="primary" @click.native="handleGoto" v-if="!aidAble">我也要福利</x-button>
         </main>
     </w-card>
@@ -67,7 +67,7 @@ header {
     padding-bottom: 20px;
     border-bottom: 1px solid #E6E6E6;
     margin-bottom: 20px;
-    &>h1 {
+    &>h1.user {
         padding: 10px 0;
     }
 }

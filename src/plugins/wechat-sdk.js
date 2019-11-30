@@ -3,7 +3,7 @@ import { wx_config } from "@/api/index";
 
 const wx = require("weixin-js-sdk");
 
-const shareUrl = `${window.location.origin}/aid_sign`;
+const shareUrl = `${window.location.origin}`;
 
 const jsApiList = [
   "updateAppMessageShareData",
@@ -56,8 +56,8 @@ export function authority(url) {
   });
 }
 
-export function setWxShare(options) {
-  const link = `${shareUrl}?shareid=${options.shareId}`;
+export function setWxShare(options, share = false) {
+  const link = share ? `${shareUrl}/aid_sign?shareid=${options.shareId}` : shareUrl;
   console.log("分享的路径", link);
   const shareOption = {
     title: options.title, // 分享标题

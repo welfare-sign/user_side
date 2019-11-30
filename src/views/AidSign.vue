@@ -59,11 +59,13 @@ export default {
                 customer_id: this.shareId,
                 is_help_checkin_page: true
             }).then(({ data, res }) => {
-                if (res.code === 'ERR_HELP_CHECKIN_LIMIT') {
-                    this.$router.push({ name: 'sign_page' })
-                } else {
-                    this.info = data ? data : {}
-                }
+                // if (res.code === 'ERR_HELP_CHECKIN_LIMIT') {
+                //     debugger
+                //     this.$router.push({ name: 'sign_page' })
+                // } else {
+                //     this.info = data ? data : {}
+                // }
+                this.info = data ? data : {}
             })
         },
         getStoreList() {
@@ -113,6 +115,9 @@ export default {
                     customer_id: JSON.parse(sessionStorage.shareId)
                 }
                 aid_checkin(datas).then(({ res }) => {
+                    if (res.code === 'ERR_HELP_CHECKIN_LIMIT') {
+                        this.$router.push({ name: 'sign_page' })
+                    }
                     if (res.code === 'SUCCESS') {
                         this.$vux.toast.show({
                             text: '帮助好友签到成功！',

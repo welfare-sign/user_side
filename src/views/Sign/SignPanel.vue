@@ -192,6 +192,15 @@ export default {
             this.$emit('resign')
         },
         handleShare() {
+            setWxShare(
+                {
+                    title: '分享标题',
+                    desc: '分享描述',
+                    shareId: '',
+                    imgUrl: `${window.location.origin}/static/icon.jpg`
+                },
+                true
+            )
             this.shareDialog.show = true
         },
         handlePay() {
@@ -331,7 +340,7 @@ header {
     padding-top: 14px;
     .tips {
         margin-top: 14px;
-        border-top: 1px solid #E6E6E6;
+        border-top: 1px solid #e6e6e6;
         padding: 14px 0;
     }
 }

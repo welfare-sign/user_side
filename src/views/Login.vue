@@ -69,7 +69,7 @@ export default {
 .login {
     width: 100vw;
     height: 100vh;
-    background: url(../assets/login.jpg);
+    background: url(../assets/login.png);
     background-repeat: no-repeat;
     background-size: cover;
 }
