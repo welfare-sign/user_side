@@ -39,7 +39,7 @@
                         <x-input
                             placeholder="请输入手机号"
                             type="text"
-                            is-type="china-mobile"
+                            :max="11"
                             v-model="mobile"
                         >
                             <w-countdown
@@ -49,7 +49,7 @@
                                 @click-event="handleStart"
                             />
                         </x-input>
-                        <x-input placeholder="请输入验证码" v-model="code"></x-input>
+                        <x-input :max="6" placeholder="请输入验证码" v-model="code"></x-input>
                     </group>
                 </div>
                 <div class="btn">
