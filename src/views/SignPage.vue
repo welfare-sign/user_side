@@ -32,7 +32,7 @@
             <x-dialog
                 v-model="adDialog.show"
                 class="ad-dialog"
-                :dialog-style="{'max-width': '100%', 'background-color': 'transparent', 'margin': '97px 30px', 'display': 'flex', 'flex-direction': 'column', 'align-items': 'flex-end'}"
+                :dialog-style="{'max-width': '100%', 'background-color': 'transparent', 'margin-top': '97px', 'display': 'flex', 'flex-direction': 'column', 'align-items': 'flex-end'}"
             >
                 <div class="box" :style="{'background-image': `url(${adDialog.url})`}"></div>
                 <div class="close" @click="handleCloseAd"></div>

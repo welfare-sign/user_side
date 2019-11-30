@@ -67,7 +67,7 @@ header {
     padding-bottom: 20px;
     border-bottom: 1px solid #E6E6E6;
     margin-bottom: 20px;
-    &>h1.user {
+    h1.user {
         padding: 10px 0;
     }
 }
