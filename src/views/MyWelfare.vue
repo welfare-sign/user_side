@@ -65,6 +65,7 @@ export default {
         text-align: center;
         color: @normal-font-color;
         font-size: @assist-font-size;
+        line-height: 1.5;
     }
     .btn {
         width: 140px;

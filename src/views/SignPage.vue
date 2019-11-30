@@ -252,7 +252,7 @@ export default {
             & > span {
                 flex: 1;
                 display: block;
-                padding: @assist-gap 0;
+                padding: 14px 0;
             }
             .cancel {
                 color: @normal-font-color;

@@ -228,6 +228,9 @@ header {
     display: flex;
     justify-content: space-between;
     padding: 8px 0;
+    span {
+        color: @normal-font-color;
+    }
 }
 .sign-list {
     margin: 20px 0;
@@ -285,7 +288,8 @@ header {
         color: @primary-color;
     }
     .remaind-text {
-        padding-top: @assist-gap;
+        padding-top: 14px;
+        padding-bottom: 2px;
         text-align: center;
         color: @primary-color;
         border-top: 1px solid rgba(0, 0, 0, 0.1);
@@ -315,6 +319,7 @@ header {
             overflow-y: scroll;
             color: #4d4d4d;
             font-size: 14px;
+            line-height: 1.5;
         }
     }
     .rules-close {
