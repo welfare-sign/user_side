@@ -4,7 +4,7 @@
         <welfare-list :list="welfareList" v-if="welfareList.length" />
         <div v-if="!welfareList.length">
             <div class="icon"></div>
-            <p class="desc">抱歉，您还没有获得福利<br>快去首页签到领福利吧~</p>
+            <p class="desc">现在没有福利哦，快去签到领福利吧~</p>
             <x-button class="btn" type="primary" @click.native="handleToHome">去签到</x-button>
         </div>
     </div>
