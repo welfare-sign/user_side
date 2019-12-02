@@ -15,6 +15,8 @@ import './styles/theme.less'
 // 全局设置权限
 import '@/utils/wxAuthority'
 
+import '@/utils/fixInput'
+
 Vue.config.productionTip = false
 FastClick.attach(document.body)
 
