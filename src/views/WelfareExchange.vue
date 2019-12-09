@@ -28,15 +28,17 @@
             <x-button type="primary" :disabled="!selected" @click.native="handleExchange">领取福利</x-button>
         </footer>
         <x-dialog
+            v-if="mobileDialog.show"
             v-model="mobileDialog.show"
             class="mobile-dialog"
             :dialog-style="{'max-width': '100%', 'background-color': 'transparent', 'margin': '184px 34px'}"
         >
-            <div class="box">
+            <div class="box" @click.once="handleFormDialog">
                 <div class="content">
                     <h2 class="title">输入手机号，领取您的福利</h2>
                     <group class="form-group">
                         <x-input
+                            ref="mobileInput"
                             placeholder="请输入手机号"
                             type="text"
                             :max="11"
@@ -68,10 +70,10 @@
             :dialog-style="{'max-width': '100%', 'background-color': 'transparent', 'margin': '184px 34px'}"
         >
             <div class="box" @click="handleDone(emptyDialog.routeName)">
-                <img :src="emptyDialog.imgUrl" class="pic" alt="">
+                <img :src="emptyDialog.imgUrl" class="pic" alt />
                 <!-- <div class="content">
                     <div class="pic" :style="{'background-image': `url(${emptyDialog.imgUrl})`}"></div>
-                </div> -->
+                </div>-->
             </div>
         </x-dialog>
     </div>
@@ -241,7 +243,12 @@ export default {
             }
         },
         handleDone(name) {
-            this.$router.replace({name})
+            this.$router.replace({ name })
+        },
+        handleFormDialog() {
+            if (this.mobileDialog.show === true) {
+                this.$refs.mobileInput.focus()
+            }
         }
     }
 }
@@ -322,7 +329,7 @@ footer {
         .btn {
             padding: @assist-gap;
             border-top: 1px solid #e6e6e6;
-            &>button {
+            & > button {
                 width: 140px;
             }
         }
@@ -334,7 +341,7 @@ footer {
         content: none;
     }
     /deep/ .vux-x-input {
-        background: #F0F0F0;
+        background: #f0f0f0;
         border-radius: 44px;
         margin-top: @assist-gap;
         font-size: @normal-font-size;

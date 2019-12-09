@@ -98,8 +98,8 @@ export default {
                 options: {}
             },
             shareOptions: {
-                title: '分享标题',
-                desc: '分享描述',
+                title: '签到5天，30瓶啤酒免费喝，亲测有效！',
+                desc: '人人有份，不玩虚的。',
                 shareId: '',
                 imgUrl: `${window.location.origin}/static/icon.jpg`
             },

@@ -47,7 +47,7 @@
                     <div class="box">
                         <h2>你已连续签到</h2>
                         <div class="box-main-area">{{signedTime}} 天</div>
-                        <div class="remaind-text">继续分享好友即可补签</div>
+                        <div class="remaind-text">点击右上角分享，让好友帮忙补签</div>
                     </div>
                     <div class="share-close" @click="shareDialog.show=false">
                         <span>遗憾离开</span>
@@ -201,8 +201,8 @@ export default {
         handleShare() {
             const options = {
                 ...this.shareOptions,
-                title: '分享帮签标题',
-                desc: '分享帮签描述'
+                title: '我的30瓶免费啤酒，就靠你了！帮我补签一下呗～',
+                desc: '签到5天，领30瓶啤酒，人人有份！'
             }
             setWxShare(options, true)
             this.shareDialog.show = true
